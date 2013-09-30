@@ -4,7 +4,8 @@ Validation
 
 For schema validation `validictory` gets used.
 The `valid_schema` function validates the schema against a request object.
-A `schema` is a validictory schema which should contain an `object` for the `query` parameters or a schema for the json-body.
+A `schema` is a validictory schema which should contain an `object` for the
+`query` parameters or a schema for the json-body.
 
 
 Validate Query

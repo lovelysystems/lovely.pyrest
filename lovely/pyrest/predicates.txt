@@ -10,7 +10,6 @@ Content-Type Predicate
 The content-type predicate is a predicate for the `Content-Type` header field::
 
     >>> from lovely.pyrest.predicates import ContentTypePredicate
-
     >>> predicate = ContentTypePredicate('application/json', None)
 
 `Pyramid` requires a phash method which informs the uniqueness constrains for
