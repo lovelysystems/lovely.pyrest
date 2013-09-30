@@ -62,10 +62,13 @@ The `fallback` view doesn't have any predicates::
     >>> print views[0]
     (<function _fallback at ...>, 'myService', {})
 
-The `get` view has only the `request_method` predicate::
+The `get` view has only the `request_method` and `renderer` predicates which
+get added by default if it's not passed::
 
-    >>> print views[1]
-    (<function wrapper at ...>, 'myService', {'request_method': 'GET'})
+    >>> pprint(views[1])
+    (<function wrapper at ...>,
+     'myService',
+     {'renderer': 'json', 'request_method': 'GET'})
 
 The `post` view has the `request_method` predicate and the `predicates` which
 are defined in the view decorator::
@@ -73,7 +76,9 @@ are defined in the view decorator::
     >>> pprint(views[2])
     (<function wrapper at ...>,
      'myService',
-     {'content_type': 'application/json', 'request_method': 'POST'})
+     {'content_type': 'application/json',
+      'renderer': 'json',
+      'request_method': 'POST'})
 
 Predicates
 ----------
@@ -102,7 +107,9 @@ And two additional views. The `schema` arg doesn't get added to the predicates::
     >>> pprint(views)
     [...
      (<function _fallback at ...>, 'user', {}),
-     (<function wrapper at ...>, 'user', {'request_method': 'GET'})]
+     (<function wrapper at ...>,
+      'user',
+      {'renderer': 'json', 'request_method': 'GET'})]
 
-     >>> len(views)
-     5
+    >>> len(views)
+    5

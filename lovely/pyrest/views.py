@@ -1,6 +1,6 @@
 # Shared Source Software
 # Copyright (c) 2013, Lovely Systems GmbH
-from pyramid.httpexceptions import HTTPMethodNotAllowed, HTTPError, HTTPUnsupportedMediaType
+from pyramid.httpexceptions import HTTPMethodNotAllowed, HTTPError, HTTPUnsupportedMediaType, HTTPNotAcceptable
 from pyramid.response import Response
 from pyramid.exceptions import PredicateMismatch
 from lovely.pyrest.validation import validate_schema
@@ -66,6 +66,17 @@ def get_fallback_view(service):
         for method, _, args in service.definitions:
             if method != request.method:
                 continue
+            # Check Accept header
+            if 'accept' in args:
+                supported = service.acceptables(request.method)
+                if not request.accept.best_match(supported):
+                    request.errors.status = HTTPNotAcceptable.code
+                    request.errors.add(
+                        'header',
+                        'Accept header should be one of %s' % supported
+                    )
+                    raise JSONError(request.errors, request.errors.status)
+            # Check Content-Type header
             if 'content_type' in args:
                 supported = service.content_types(request.method)
                 if request.content_type not in supported:

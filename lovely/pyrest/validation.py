@@ -30,3 +30,12 @@ def validate_schema(request, schema):
         except ValueError, error:
             request.errors.add('query',
                                error.message)
+    body_schema = schema.get("body")
+    if body_schema is not None:
+        try:
+            json_body = request.json_body
+            validictory.validate(json_body, body_schema,
+                                 format_validators=FORMAT_VALIDATORS)
+        except ValueError, error:
+            request.errors.add('body',
+                               error.message)

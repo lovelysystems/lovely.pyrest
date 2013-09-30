@@ -56,5 +56,9 @@ Use the decorators to create views for the HTTP-Methods::
 For every view an entry in the `definitions` list gets created::
 
     >>> pprint(service.definitions)
-    [('GET', <function get ..., {'content_type': 'application/json'}),
-     ('DELETE', <function delete ..., {'content_type': 'text/html'})]
+    [('GET',
+      <function get at ...>,
+      {'content_type': 'application/json', 'renderer': 'json'}),
+     ('DELETE',
+      <function delete at ...>,
+      {'content_type': 'text/html', 'renderer': 'json'})]

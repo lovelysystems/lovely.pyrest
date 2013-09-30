@@ -4,6 +4,10 @@ import functools
 
 METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PURGE']
 
+DEFAULTS = {
+    'renderer': 'json'
+}
+
 
 class Service(object):
 
@@ -36,7 +40,9 @@ class Service(object):
 
     def add_view(self, method, view, **kwargs):
         method = method.upper()
-        self.definitions.append((method, view, kwargs))
+        args = self.get_args(kwargs)
+
+        self.definitions.append((method, view, args))
         if method not in self.methods:
             self.methods.append(method)
 
@@ -46,3 +52,23 @@ class Service(object):
             if m == method and 'content_type' in args:
                 types.append(args['content_type'])
         return types
+
+    def acceptables(self, method):
+        acceptable = []
+        for m, v, args in self.definitions:
+            if m == method and 'accept' in args:
+                acceptable.append(args['accept'])
+        return acceptable
+
+    def get_args(self, args=None):
+        if args is None:
+            args = {}
+        arguments = {}
+
+        for arg in DEFAULTS:
+            # get the value from the passed conf
+            # then from the DEFAULTS
+            arguments[arg] = args.get(arg, DEFAULTS[arg])
+        # update the defaults with the passed args
+        arguments.update(args)
+        return arguments
