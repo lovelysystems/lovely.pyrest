@@ -1,0 +1,60 @@
+.. Shared Source Software
+   Copyright (c) 2013 Lovely Systems GmbH
+
+==================
+Service Unit Tests
+==================
+
+Content types
+=============
+
+A `service` holds a list of views, content_types and other arguments. So it's
+possible to get all `content_types` for a specific method::
+
+    >>> from lovely.pyrest.service import Service
+    >>> service = Service('myService', '/service')
+
+Add views for 'POST' method with a content_type::
+
+    >>> service.add_view('POST', None, content_type='application/json')
+    >>> service.add_view('POST', None, content_type='text/html')
+
+The service returns both content_types::
+
+    >>> service.content_types('POST')
+    ['application/json', 'text/html']
+
+Because we didn't any view for the `GET` method the content_type array
+is empty::
+
+    >>> service.content_types('GET')
+    []
+
+Decorators
+==========
+
+A `service` has decorators for the following HTTP-Methods::
+
+    >>> from lovely.pyrest.service import METHODS
+    >>> print METHODS
+    ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PURGE']
+
+Create a new service::
+
+    >>> service = Service('myService', '/service')
+
+Use the decorators to create views for the HTTP-Methods::
+
+    >>> @service.get(content_type='application/json')
+    ... def get(request):
+    ...     return 'hello'
+
+    >>> @service.delete(content_type='text/html')
+    ... def delete(request):
+    ...     return 'hello'
+
+For every view an entry in the `definitions` list gets created::
+
+    >>> pprint(service.definitions)
+    [('GET', <function get ..., {'content_type': 'application/json'}),
+     ('DELETE', <function delete ..., {'content_type': 'text/html'})]

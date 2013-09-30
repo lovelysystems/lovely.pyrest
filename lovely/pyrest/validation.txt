@@ -1,0 +1,57 @@
+==========
+Validation
+==========
+
+For schema validation `validictory` gets used.
+The `valid_schema` function validates the schema against a request object.
+A `schema` is a validictory schema which should contain an `object` for the `query` parameters or a schema for the json-body.
+
+
+Validate Query
+==============
+
+Lets create a schema to validate the query parameters::
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "u": {
+    ...                 "type": "string",
+    ...                 "format": "url"
+    ...             }
+    ...         }
+    ...     }
+    ... }
+
+Create a request object::
+
+    >>> from pyramid.request import Request
+    >>> from lovely.pyrest.errors import Errors
+    >>> request = Request({})
+    >>> request.errors = Errors()
+
+Because the `request` doesn't have any GET parameters, validation
+fails because the `u` object is required.
+If validation fails an entry gets added to the requests error object::
+
+    >>> from lovely.pyrest.validation import validate_schema
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    [{'location': 'query', 'description': "Required field 'u' is missing"}]
+
+Add the required `GET` parameter::
+
+    >>> request.errors = Errors()
+    >>> request.GET['u'] = 'not-a-valid-url'
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    [{'location': 'query', 'description': "Value 'not-a-valid-url' of field 'u' is not an url"}]
+
+Add the required `GET` parameter with a correct url::
+
+    >>> request.errors = Errors()
+    >>> request.GET['u'] = 'http://doesnotexist.com'
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    []
