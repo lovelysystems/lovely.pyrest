@@ -1,1 +1,1 @@
-# NAMESPACE
+# Lovely pyrest itests
