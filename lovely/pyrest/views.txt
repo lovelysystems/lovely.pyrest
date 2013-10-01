@@ -1,0 +1,153 @@
+.. Shared Source Software
+   Copyright (c) 2006-2013, Lovely Systems GmbH
+
+===============
+Views Unit Test
+===============
+
+lovely.pyrest provides some views and methods to create or decorate views.
+
+Fallback View
+=============
+
+Every view of a `service` has some predicates. If pyramid receives a request
+where none of the predicates matches pyramid will raise a PredicateMismatch
+error and a `404` gets returned.
+For example: If a service gets defined, which has one
+view for `GET`, a `POST` request would cause a 404 because there is no view in
+the service which matches the 'http_method' predicate.
+Because a `405` error would be the correct error code for this case every service
+has a default view which matches all predicates and returns better error views.
+Let's define a service::
+
+    >>> from lovely.pyrest.service import Service
+    >>> service = Service('myService', '/service')
+
+Method not allowed
+------------------
+
+Add a view::
+
+    >>> @service.get()
+    ... def get(request):
+    ...     return 'hello'
+
+Create the fallback view from the service::
+
+    >>> from lovely.pyrest.views import get_fallback_view
+    >>> fb = get_fallback_view(service)
+
+The fallback view raises a `405` if the request method is not defined in the
+`service`::
+
+    >>> from pyramid.request import Request
+    >>> from lovely.pyrest.errors import Errors
+    >>> request = Request({})
+    >>> request.errors = Errors()
+    >>> request.method = 'POST'
+    >>> fb(request)
+    Traceback (most recent call last):
+    HTTPMethodNotAllowed: The server could not comply with the ...
+
+Unsupported Media Type
+----------------------
+
+Let's add a view for post with a `content_type` predicate::
+
+    >>> @service.post(content_type='application/json')
+    ... def post(request):
+    ...     return 'hello'
+
+The fallback view raises an error because the `content_type` field doesn't
+match::
+
+    >>> from lovely.pyrest.views import JSONError
+    >>> try:
+    ...     fb(request)
+    ... except JSONError, e:
+    ...     error = e
+    >>> print e.status
+    415 Unsupported Media Type
+
+    >>> pprint(e.json_body)
+    {u'errors': [{u'description': u"Content-Type header should be one of ['application/json']",
+                  u'location': u'header'}],
+     u'status': u'error'}
+
+
+Decorated View
+==============
+
+The `decorate_view` method adds a decorator to a `pyramid` view. The decorator
+validates the `schema` and executes the additional `validators`.
+Create a view::
+
+    >>> def my_view(request):
+    ...     return 'hello'
+
+Validator
+---------
+
+Create a validator which always fails and adds an error to the request::
+
+    >>> def validate(request):
+    ...     request.errors.add('location', 'error')
+    ...     request.errors.status = 409
+
+Perform a request on the not decorated view::
+
+    >>> request = create_request()
+    >>> my_view(request)
+    'hello'
+
+    >>> pprint(request.errors)
+    []
+
+If the request gets performed on the decorated view, the validator gets
+executed::
+
+    >>> from lovely.pyrest.views import decorate_view
+    >>> decorated = decorate_view(my_view, {'validators':[validate]})
+    >>> decorated(request)
+    <JSONError ... 409 Conflict>
+
+    >>> pprint(request.errors)
+    [{'description': 'error', 'location': 'location'}]
+
+Schema
+------
+
+Create a schema::
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "u": {
+    ...                 "type": "string",
+    ...                 "format": "url"
+    ...             }
+    ...         }
+    ...     }
+    ... }
+
+Create a decorated view with the schema::
+
+    >>> decorated = decorate_view(my_view, {'schema':schema})
+
+Perform a request on the not decorated view::
+
+    >>> request = create_request()
+    >>> my_view(request)
+    'hello'
+
+    >>> pprint(request.errors)
+    []
+
+If the request gets performed on the decorated view the schema gets validated::
+
+    >>> decorated(request)
+    <JSONError at ... 400 Bad Request>
+
+    >>> pprint(request.errors)
+    [{'description': "Required field 'u' is missing", 'location': 'query'}]

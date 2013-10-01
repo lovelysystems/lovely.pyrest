@@ -1,0 +1,15 @@
+.. Shared Source Software
+   Copyright (c) 2013 Lovely Systems GmbH
+
+===========================
+Sandboxed Development Setup
+===========================
+
+The following packages need to be installed::
+
+    python27
+
+On OSX those packages could be installed with macports::
+
+    sudo port install python27
+

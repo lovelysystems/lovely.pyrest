@@ -1,0 +1,115 @@
+.. Shared Source Software
+   Copyright (c) 2006-2013, Lovely Systems GmbH
+
+=============
+Lovely PyRest
+=============
+
+Add Service
+===========
+
+Every service defines a callback at `init` and attaches it to `venusian`,
+so the callback gets called on scan(). The callback just adds the service to
+the config using the `add_service` method.
+Create a config::
+
+    >>> from pyramid.config import Configurator
+    >>> config = Configurator()
+
+Overwrite the `add_view` and `add_route` method, so it's possible to inspect
+the `views` and `routes`::
+
+    >>> views = []
+    >>> routes= []
+    >>> def add_view(view=None, route_name=None, **args):
+    ...     views.append((view, route_name, args))    
+
+    >>> def add_route(name, path):
+    ...     routes.append((name, path))
+
+    >>> config.add_view = add_view
+    >>> config.add_route = add_route
+
+Include `lovely.pyrest` so the `add_service` method gets registered::
+
+    >>> config.include('lovely.pyrest')
+
+Create a service::
+
+    >>> from lovely.pyrest.service import Service
+    >>> service = Service('myService', '/service')
+    >>> @service.get()
+    ... def get(request):
+    ...     return 'hello get'
+
+    >>> @service.post(content_type='application/json')
+    ... def post(request):
+    ...     return 'hello post'
+
+Add the service to the config::
+
+    >>> config.add_service(service)
+
+One route gets added to the config for the service::
+
+    >>> print routes
+    [('myService', '/service')]
+
+Three views get added for the `route`. One for each `HTTP-Method` and an
+additional `fallback_view` which handels errors if no predicate matches.
+The `fallback` view doesn't have any predicates::
+
+    >>> print views[0]
+    (<function _fallback at ...>, 'myService', {})
+
+The `get` view has only the `request_method` and `renderer` predicates which
+get added by default if it's not passed::
+
+    >>> pprint(views[1])
+    (<function wrapper at ...>,
+     'myService',
+     {'renderer': 'json', 'request_method': 'GET'})
+
+The `post` view has the `request_method` predicate and the `predicates` which
+are defined in the view decorator::
+
+    >>> pprint(views[2])
+    (<function wrapper at ...>,
+     'myService',
+     {'content_type': 'application/json',
+      'renderer': 'json',
+      'request_method': 'POST'})
+
+Predicates
+----------
+
+Every argument defined in the service is used as view predicate
+when the view gets added to the config.
+Except the `validators` and `schema` arg. Because validation is not performed
+by pyramid.
+
+Create another service and add it to the config::
+
+    >>> user_service = Service('user', '/user')
+    >>> @user_service.get(schema={})
+    ... def get(request):
+    ...     return 'Ford Perfect'
+
+    >>> config.add_service(user_service)
+
+Config contains two routes now::
+ 
+    >>> print routes
+    [('myService', '/service'), ('user', '/user')]
+
+And two additional views. The `schema` arg doesn't get added to the predicates::
+
+    >>> pprint(views)
+    [...
+     (<function _fallback at ...>, 'user', {}),
+     (<function wrapper at ...>,
+      'user',
+      {'renderer': 'json', 'request_method': 'GET'})]
+
+    >>> len(views)
+    5
