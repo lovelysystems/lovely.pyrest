@@ -8,6 +8,6 @@ Changes for Lovey Pyrest
  - added basic functionallity:
     * raise a 405 if an unimplemented method is called on a service
     * provide schema validation
-    * raise a correct erros if the `Accept` or `Content-Type` headers mismatch
+    * raise correct errors if the `Accept` or `Content-Type` headers mismatch
 
  - initial commit

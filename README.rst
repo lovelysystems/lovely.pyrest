@@ -4,8 +4,8 @@ Lovely PyRest
 
 Lovely Pyrest provides helpers to build REST-Webservices with pyramid.
 
-Fatures
-=======
+Features
+========
 
     - raise a 405 if an unimplemented method is called on a servie
     - provides schema validation using validictory
@@ -29,10 +29,14 @@ Run buildout::
 
     ./bin/buildout -N
 
+Note::
+
+   Python shouldn't have installed any 3rd party packages
+
 Testing
 =======
 
-Tu run all the tests use::
+To run all the tests use::
 
     ./bin/test
 

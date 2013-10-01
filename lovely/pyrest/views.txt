@@ -58,7 +58,7 @@ Let's add a view for post with a `content_type` predicate::
     ... def post(request):
     ...     return 'hello'
 
-The fallback view raises an error becuase the `content_type` field doesn't
+The fallback view raises an error because the `content_type` field doesn't
 match::
 
     >>> from lovely.pyrest.views import JSONError

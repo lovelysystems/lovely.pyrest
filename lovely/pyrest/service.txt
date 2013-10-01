@@ -24,7 +24,7 @@ The service returns both content_types::
     >>> service.content_types('POST')
     ['application/json', 'text/html']
 
-Because we didn't any view for the `GET` method the content_type array
+Because there is no view for the `GET` method the content_type array
 is empty::
 
     >>> service.content_types('GET')

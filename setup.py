@@ -33,6 +33,17 @@ def nailed_requires(requirements, pat=re.compile(r'^(.+)(\[.+\])?$')):
     return res
 
 
+def read(path):
+    return open(os.path.join(os.path.dirname(__file__), path)).read()
+versionf_content = open("lovely/pyrest/__init__.py").read()
+version_rex = r'^__version__ = [\'"]([^\'"]*)[\'"]$'
+m = re.search(version_rex, versionf_content, re.M)
+if m:
+    version = m.group(1)
+else:
+    raise RuntimeError('Unable to find version string')
+
+
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
@@ -60,8 +71,9 @@ setup(name='lovely.pyrest',
       author='Lovely Systems',
       author_email='office@lovelysystems.com',
       url='https://github.com/lovelysystems/lovely.pyrest',
-      keywords='gate module paywall',
+      keywords='pyramid rest framework',
       packages=find_packages(),
+      namespace_packages=['lovely'],
       include_package_data=True,
       extras_require=dict(
           test=nailed_requires([

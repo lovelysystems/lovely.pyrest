@@ -1,6 +1,9 @@
 # Shared Source Software
 # Copyright (c) 2013, Lovely Systems GmbH
-from pyramid.httpexceptions import HTTPMethodNotAllowed, HTTPError, HTTPUnsupportedMediaType, HTTPNotAcceptable
+from pyramid.httpexceptions import (HTTPMethodNotAllowed,
+                                    HTTPError,
+                                    HTTPUnsupportedMediaType,
+                                    HTTPNotAcceptable)
 from pyramid.response import Response
 from pyramid.exceptions import PredicateMismatch
 from lovely.pyrest.validation import validate_schema
@@ -42,7 +45,8 @@ class JSONError(HTTPError):
 
     def __init__(self, errors, status=400):
         body = {'status': 'error', 'errors': errors}
-        Response.__init__(self, json.dumps(body))
+        # HTTPError is derived from Response
+        super(Response, self).__init__(json.dumps(body))
         self.status = status
         self.content_type = 'application/json'
 

@@ -8,7 +8,7 @@ So create a pyramid app which scans the module::
     >>> from webtest import TestApp
     >>> from pyramid import testing
     >>> config = testing.setUp()
-    >>> config.include('lovely.pyrest.rest')
+    >>> config.include('lovely.pyrest')
     >>> config.scan('lovely.pyrest.itests.service_definition')
     >>> app = TestApp(config.make_wsgi_app())
 
@@ -66,7 +66,7 @@ So a `415` gets returned if the `Acccept` header matches, but the content_type d
                   u'location': u'header'}],
      u'status': u'error'}
 
-If both predicates match an error response get returned::
+If both predicates match a success resposne get returned::
 
     >>> headers = {'Accept': '*/*', 'Content-Type': 'application/json'}
     >>> res = app.get('/user', headers=headers)

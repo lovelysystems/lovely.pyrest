@@ -3,8 +3,8 @@
 
 from lovely.pyrest.service import Service
 
-# This module contains several service definitions with
-# predicates and validators for integration testing
+""" This module contains several service definitions with
+    predicates and validators for integration testing """
 
 
 # Define a simple service

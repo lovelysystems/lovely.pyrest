@@ -32,7 +32,7 @@ the `views` and `routes`::
 
 Include `lovely.pyrest` so the `add_service` method gets registered::
 
-    >>> config.include('lovely.pyrest.rest')
+    >>> config.include('lovely.pyrest')
 
 Create a service::
 
@@ -85,7 +85,7 @@ Predicates
 
 Every argument defined in the service is used as view predicate
 when the view gets added to the config.
-Eexpect the `validators` and `schema` arg. Because validation is not performed
+Except the `validators` and `schema` arg. Because validation is not performed
 by pyramid.
 
 Create another service and add it to the config::
