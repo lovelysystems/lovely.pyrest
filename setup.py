@@ -5,7 +5,6 @@ import os
 import re
 import ConfigParser
 from setuptools import setup, find_packages
-from lovely.pyrest import VERSION
 
 
 def get_versions():
@@ -59,7 +58,7 @@ test_requires = requires + [
 ]
 
 setup(name='lovely.pyrest',
-      version=VERSION,
+      version=version,
       description='REST Framework for pyramids',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[

@@ -5,6 +5,9 @@
 Changes for Lovey Pyrest
 ========================
 
+2013/10/01 0.0.1
+================
+
  - added basic functionallity:
     * raise a 405 if an unimplemented method is called on a service
     * provide schema validation
