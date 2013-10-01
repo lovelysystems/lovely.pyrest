@@ -16,6 +16,7 @@ def validate_format_url(validator, fieldname, value, format_option):
 FORMAT_VALIDATORS = {
     "url": validate_format_url
 }
+FORMAT_VALIDATORS.update(validictory.validator.DEFAULT_FORMAT_VALIDATORS)
 
 
 def validate_schema(request, schema):

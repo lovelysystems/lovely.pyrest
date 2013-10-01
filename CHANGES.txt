@@ -5,6 +5,11 @@
 Changes for Lovey Pyrest
 ========================
 
+2013/10/01 0.0.2
+================
+
+ - include DEFAULT_FORMAT_VALIDATORS from validictory
+
 2013/10/01 0.0.1
 ================
 
