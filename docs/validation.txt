@@ -6,7 +6,7 @@ Validation
 ==========
 
 Lovely PyRest provides two ways of validation. On the one hand you can use
-schema validation using validictory. On the other hand you can implement
+schema validation using `Validictory <https://github.com/sunlightlabs/validictory>`_. On the other hand you can implement
 custom validators as functions to be more flexible.
 Both ways can be combined.
 

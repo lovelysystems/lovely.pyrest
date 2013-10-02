@@ -27,6 +27,8 @@ source_suffix = '.txt'
 
 # The master toctree document.
 master_doc = 'index'
+html_use_modindex = False
+html_use_index = False
 
 nitpicky = True
 
