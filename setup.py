@@ -54,7 +54,9 @@ requires = [
 ]
 
 test_requires = requires + [
-    'webtest'
+    'webtest',
+    'collective.xmltestreport',
+    'requests'
 ]
 
 setup(name='lovely.pyrest',
@@ -75,10 +77,7 @@ setup(name='lovely.pyrest',
       namespace_packages=['lovely'],
       include_package_data=True,
       extras_require=dict(
-          test=nailed_requires([
-              'collective.xmltestreport',
-              'webtest',
-          ]),
+          test=nailed_requires(test_requires),
       ),
       zip_safe=False,
       install_requires=requires,

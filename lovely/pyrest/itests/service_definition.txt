@@ -26,9 +26,20 @@ Perform a get on the service::
 Because only `GET` is implemented, a 405 gets returned when performing a
 `POST` request::
 
-    >>> app.post('/service')
-    Traceback (most recent call last):
-    HTTPMethodNotAllowed: ...
+    >>> res =  app.post('/service', status=405)
+    >>> print res.status
+    405 Method Not Allowed
+
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "The method POST is not allowed for this resource",
+                "location": "method"
+            }
+        ],
+        "status": "error"
+    }
 
 Predicates
 ==========
@@ -37,34 +48,40 @@ The `user` service returns an error response if the `Accept-Header` does not
 match when performing a `GET` request::
 
     >>> from lovely.pyrest.views import JSONError
-    >>> try:
-    ...     app.get('/user', headers={'Accept': 'text/html'})
-    ... except JSONError, e:
-    ...     error = e
+    >>> res = app.get('/user', headers={'Accept': 'text/html'}, status=406)
 
-    >>> print error.status
+    >>> print res.status
     406 Not Acceptable
 
-    >>> pprint(error.json_body)
-    {u'errors': [{u'description': u"Accept header should be one of ['application/json']",
-                  u'location': u'header'}],
-     u'status': u'error'}
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "Accept header should be one of ['application/json']",
+                "location": "header"
+            }
+        ],
+        "status": "error"
+    }
 
 The `users` service has also defined a `content_type` predicate.
 So a `415` gets returned if the `Acccept` header matches, but the content_type doesn't::
 
-    >>> try:
-    ...     app.get('/user', headers={'Accept': 'application/*'})
-    ... except JSONError, e:
-    ...     pass
+    >>> res = app.get('/user', headers={'Accept': 'application/*'}, status=415)
 
-    >>> print e.status
+    >>> print res.status
     415 Unsupported Media Type
 
-    >>> pprint(e.json_body)
-    {u'errors': [{u'description': u"Content-Type header should be one of ['application/json']",
-                  u'location': u'header'}],
-     u'status': u'error'}
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "Content-Type header should be one of ['application/json']",
+                "location": "header"
+            }
+        ],
+        "status": "error"
+    }
 
 If both predicates match a success resposne get returned::
 
