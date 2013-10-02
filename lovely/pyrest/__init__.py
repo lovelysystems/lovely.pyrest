@@ -7,7 +7,7 @@ from pyramid.events import NewRequest
 from errors import Errors
 import copy
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 
 def add_service(config, service):
