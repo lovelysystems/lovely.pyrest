@@ -44,28 +44,11 @@ For additional testrunner options run::
 
     ./bin/test --help
 
-Deploy Documentation
-====================
-
-The documentation is hosted at `github pages`. The submodule gh-pages contains
-the static files. Ensure you have the submodule::
-
-    git submodule init
-
-    git submodule update
+Generating Documentation
+========================
 
 To generate the new documentation run::
 
     ./bin/sphinx-html
 
-Move into the submodule::
-
-    cd gh-pages
-
-Commit the changed documentation::
-
-    git commit -a -m "updated documentation
-
-Push it::
-
-    git push origin gh-pages
+The documentation is located in the `out` directory
