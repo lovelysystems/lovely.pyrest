@@ -1,0 +1,95 @@
+.. Shared Source Software
+   Copyright (c) 2013, Lovely Systems GmbH
+
+==========
+Validation
+==========
+
+Lovely PyRest provides two ways of validation. On the one hand you can use
+schema validation using validictory. On the other hand you can implement
+custom validators as functions to be more flexible.
+Both ways can be combined.
+
+Schema Validation
+=================
+
+This is an example how to validate the `query`-Parameter and the request body:
+
+.. literalinclude:: examples/schema_validation.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.schema_validation')
+
+Performing a POST request without any body or GET-Parameter fails and a json
+error gets returned::
+
+    >>> res = app.post('/article', status=400)
+    >>> print res.status
+    400 Bad Request
+
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "Required field 'id' is missing",
+                "location": "query"
+            },
+            {
+                "description": "No JSON object could be decoded",
+                "location": "body"
+            }
+        ],
+        "status": "error"
+    }
+
+For validation the `query` and `body` properties are used as seperate schemas.
+The `query` schema is used for validating the GET-Parameter and the `body`
+schema is used for validating the request body.
+It's not necessary to define both of them.
+
+.. note::
+
+    If you define a `query` schema it's important that the type is `object`,
+    because the GET-Parameter will be converted to a dictionary before they
+    get validated.
+    For the `body` schema it's ok to use `array`.
+
+
+For schema validation `Validictory
+<https://github.com/sunlightlabs/validictory>`_ is used. 
+Check the documentation to learn how to define schemas: `Validictory Documentation <http://validictory.readthedocs.org/en/latest/>`_.
+
+Validators
+==========
+
+This example shows how to implement `validators` as functions:
+
+.. literalinclude:: examples/validation.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.validation')
+
+The `validator` function gets called by `lovely.pyrest` and passes the incoming
+request as parameter.
+The `validator` just has to add one or more errors if validation fails.
+It's possible to use multiple validators.
+
+
+    >>> res = app.get('/article', status=400)
+    >>> print res.status
+    400 Bad Request
+
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "Parameter `id` is missing",
+                "location": "query"
+            }
+        ],
+        "status": "error"
+    }
