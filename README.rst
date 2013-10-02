@@ -43,3 +43,15 @@ To run all the tests use::
 For additional testrunner options run::
 
     ./bin/test --help
+
+Deploy Documentation
+====================
+
+The documentation is hosted at `github pages`. To update it run::
+
+    ./bin/sphinx-html
+
+Then commit your documentation changes in the gh-pages folder and then
+push it to gh-pages::
+
+    git subtree push --prefix gh-pages origin gh-pages
