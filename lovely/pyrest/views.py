@@ -6,6 +6,7 @@ from pyramid.httpexceptions import (HTTPMethodNotAllowed,
                                     HTTPNotAcceptable)
 from pyramid.response import Response
 from pyramid.exceptions import PredicateMismatch
+from errors import Errors
 from lovely.pyrest.validation import validate_schema
 import json
 import functools
@@ -65,7 +66,12 @@ def get_fallback_view(service):
     # mismatch
     def _fallback(request):
         if request.method not in service.methods:
-            raise HTTPMethodNotAllowed()
+            errors = Errors()
+            errors.add(
+                'method',
+                'The method %s is not allowed for this resource' % request.method
+            )
+            return JSONError(errors, HTTPMethodNotAllowed.code)
         # Check other predicates like content type
         for method, _, args in service.definitions:
             if method != request.method:
@@ -79,7 +85,7 @@ def get_fallback_view(service):
                         'header',
                         'Accept header should be one of %s' % supported
                     )
-                    raise JSONError(request.errors, request.errors.status)
+                    return JSONError(request.errors, request.errors.status)
             # Check Content-Type header
             if 'content_type' in args:
                 supported = service.content_types(request.method)
@@ -88,7 +94,7 @@ def get_fallback_view(service):
                     request.errors.add(
                         'header',
                         'Content-Type header should be one of %s' % supported)
-                    raise JSONError(request.errors, request.errors.status)
+                    return JSONError(request.errors, request.errors.status)
         raise PredicateMismatch(service.name)
 
     return _fallback

@@ -43,3 +43,12 @@ To run all the tests use::
 For additional testrunner options run::
 
     ./bin/test --help
+
+Generating Documentation
+========================
+
+To generate the new documentation run::
+
+    ./bin/sphinx-html
+
+The documentation is located in the `out` directory

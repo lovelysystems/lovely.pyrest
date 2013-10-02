@@ -53,6 +53,6 @@ def test_suite():
         create_suite('predicates.txt'),
         create_suite('views.txt'),
         create_suite('rest.txt'),
-        create_suite('itests/service_definition.txt'),
+        create_suite('itests/service_definition.txt')
     ))
     return s

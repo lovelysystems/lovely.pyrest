@@ -45,9 +45,20 @@ The fallback view raises a `405` if the request method is not defined in the
     >>> request = Request({})
     >>> request.errors = Errors()
     >>> request.method = 'POST'
-    >>> fb(request)
-    Traceback (most recent call last):
-    HTTPMethodNotAllowed: The server could not comply with the ...
+    >>> res = fb(request)
+    >>> print res.status
+    405 Method Not Allowed
+
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "The method POST is not allowed for this resource",
+                "location": "method"
+            }
+        ],
+        "status": "error"
+    }
 
 Unsupported Media Type
 ----------------------
@@ -62,17 +73,20 @@ The fallback view raises an error because the `content_type` field doesn't
 match::
 
     >>> from lovely.pyrest.views import JSONError
-    >>> try:
-    ...     fb(request)
-    ... except JSONError, e:
-    ...     error = e
-    >>> print e.status
+    >>> res = fb(request)
+    >>> print res.status
     415 Unsupported Media Type
 
-    >>> pprint(e.json_body)
-    {u'errors': [{u'description': u"Content-Type header should be one of ['application/json']",
-                  u'location': u'header'}],
-     u'status': u'error'}
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "Content-Type header should be one of ['application/json']",
+                "location": "header"
+            }
+        ],
+        "status": "error"
+    }
 
 
 Decorated View
