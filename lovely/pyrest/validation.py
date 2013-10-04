@@ -28,7 +28,8 @@ def validate_schema(request, schema):
             params = {k: request.GET[k] for k in request.GET}
             for prop, o in query_schema.get('properties').iteritems():
                 # if schema type is array, split the parameter string by comma
-                # and set list value instead of string
+                # and replace the original string value with the generated
+                # array for the validation
                 if o.get('type') == 'array':
                     v = params.get(prop)
                     if v is not None:
