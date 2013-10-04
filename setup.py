@@ -48,6 +48,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
+    'gevent',
     'pyramid',
     'validictory',
     'rfc3987'
