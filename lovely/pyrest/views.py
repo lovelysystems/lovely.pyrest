@@ -25,6 +25,7 @@ def decorate_view(view, args):
         _view = view
         validators = args.get('validators', ())
         schema = args.get('schema')
+        jsonp = args.get('jsonp')
         # check schema
         if schema:
             validate_schema(request, schema)
@@ -37,9 +38,28 @@ def decorate_view(view, args):
         if len(request.errors) > 0:
             return JSONError(request.errors, request.errors.status)
         response = _view(request)
+        if jsonp:
+            response = add_jsonp_callback(request, response)
         return response
     functools.wraps(wrapper)
     return wrapper
+
+
+def add_jsonp_callback(request, response):
+    """ If request.GET contains the query parameter 'callback'
+    the response will be wrapped as JSONP callback with the assigned
+    value of 'callback'.
+
+    We override the renderer of the requerst with 'jsonp'.
+    Note: The renderer does hav to be added to the config (see:
+    http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/renderers.html#jsonp-renderer)
+    """
+
+    # check if either 'callback' is set.
+    if 'callback' in request.GET:
+        request.override_renderer = 'jsonp'
+
+    return response
 
 
 class JSONError(HTTPError):

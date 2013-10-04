@@ -8,7 +8,8 @@ import functools
 METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PURGE']
 
 DEFAULTS = {
-    'renderer': 'json'
+    'renderer': 'json',
+    'jsonp': True           # Enable JSONP support by default
 }
 
 

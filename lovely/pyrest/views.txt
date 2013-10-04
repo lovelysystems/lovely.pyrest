@@ -165,3 +165,42 @@ If the request gets performed on the decorated view the schema gets validated::
 
     >>> pprint(request.errors)
     [{'description': "Required field 'u' is missing", 'location': 'query'}]
+
+JSONP
+-----
+
+Create a view::
+
+    >>> def my_view(request):
+    ...     return {'data': 'some test data'}
+
+Create a decorated view with the JSONP support enabled::
+
+    >>> jsonp = True
+    >>> decorated = decorate_view(my_view, {'jsonp': jsonp})
+
+Perform a request on the not decorated view::
+
+    >>> request = create_request()
+    >>> my_view(request)
+    {'data': 'some test data'}
+
+    >>> pprint(request.errors)
+    []
+
+JSONP support is enabled, the request does not have set the query parameter
+'callback'. Therefore, the request is not a callback::
+
+    >>> decorated(request)
+    {'data': 'some test data'}
+
+Set the query parameter 'callback'.
+If the parameter is set, we override the renderer and set it to 'jsonp'.
+Note: The response will not be decorated at by our own decorator!
+Therefore, you will get the unaltered JSON data::
+
+    >>> request.GET['callback'] = 'my_callback'
+    >>> decorated(request)
+    {'data': 'some test data'}
+    >>> request.override_renderer
+    'jsonp'
