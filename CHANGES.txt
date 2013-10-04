@@ -5,6 +5,11 @@
 Changes for Lovey Pyrest
 ========================
 
+unreleased
+==========
+
+ - possibility to use array type in GET query validation
+
 2013/10/02 0.0.3
 ================
 
