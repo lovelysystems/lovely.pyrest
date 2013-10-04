@@ -26,6 +26,16 @@ def validate_schema(request, schema):
         try:
             # convert GET parameters to a dictionary which can be validated
             params = {k: request.GET[k] for k in request.GET}
+            for prop, o in query_schema.get('properties').iteritems():
+                # if schema type is array, split the parameter string by comma
+                # and replace the original string value with the generated
+                # array for the validation
+                if o.get('type') == 'array':
+                    v = params.get(prop)
+                    if v is not None:
+                        params[prop] = v.split(",")
+            # for convenience remember the params_dict on the request
+            request.params_dict = params
             validictory.validate(params, query_schema,
                                  format_validators=FORMAT_VALIDATORS)
         except ValueError, error:
