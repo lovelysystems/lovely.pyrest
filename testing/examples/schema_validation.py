@@ -16,6 +16,13 @@ schema = {
         "properties": {
             "id": {
                 "type": "string"
+            },
+            "categories": {
+                "type": "array",
+                "required": False,
+                "items": {
+                    "enum": ["news", "sports", "politics"]
+                }
             }
         }
     }
@@ -24,5 +31,11 @@ schema = {
 
 @article.post(schema=schema)
 def post(request):
+    """ Save an article """
+    return {'stored': 'ok'}
+
+
+@article.get(schema=schema)
+def get(request):
     """ Save an article """
     return {'stored': 'ok'}
