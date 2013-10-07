@@ -58,8 +58,36 @@ It's not necessary to define both of them.
 
 
 For schema validation `Validictory
-<https://github.com/sunlightlabs/validictory>`_ is used. 
+<https://github.com/sunlightlabs/validictory>`_ is used.
 Check the documentation to learn how to define schemas: `Validictory Documentation <http://validictory.readthedocs.org/en/latest/>`_.
+
+
+Arrays on GET requests
+----------------------
+
+It is possible to validate arrays on GET parameters. The parameter string will
+be split by commas and each tag will be used as a list value. This way it is
+for example possible to validate against a list of allowed words::
+
+    >>> res = app.get('/article?id=100&categories=news,music', status=400)
+    >>> print res.status
+    400 Bad Request
+
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "Failed to validate field 'categories' list schema: Value u'music' for list item is not in the enumeration: ['news', 'sports', 'politics']",
+                "location": "query"
+            },
+            {
+                "description": "No JSON object could be decoded",
+                "location": "body"
+            }
+        ],
+        "status": "error"
+    }
+
 
 Validators
 ==========

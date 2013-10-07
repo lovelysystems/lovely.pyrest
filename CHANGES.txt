@@ -5,11 +5,19 @@
 Changes for Lovey Pyrest
 ========================
 
-2013/10/07 0.0.4
+unreleased
+==========
+
+2013/10/07 0.0.5
 ================
 
 - added JSONP support
 - added documentation
+
+2013/10/04 0.0.4
+================
+
+ - possibility to use array type in GET query validation
 
 2013/10/02 0.0.3
 ================

@@ -57,6 +57,54 @@ Add the required `GET` parameter with a correct url::
     >>> request.errors
     []
 
+Schema type 'array' and query params
+----------------------------------
+
+The 'array' type can also be specified on GET query schemas. The value is
+split by commas before validation, so the default array validation techniques
+can be used::
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "x": {
+    ...                 "type": "array",
+    ...                 "items": {"enum": ["a", "b", "c"]}
+    ...             }
+    ...         }
+    ...     }
+    ... }
+
+Use with only one param and without comma::
+
+    >>> request = Request({})
+    >>> request.errors = Errors()
+    >>> request.GET['x'] = 'a'
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    []
+
+Use multiple params, seperated with comma::
+
+    >>> request.GET['x'] = 'a,b'
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    []
+
+The parsed dictionary with the list value is set on the request object::
+
+    >>> request.params_dict
+    {'x': ['a', 'b']}
+
+Using a value that is not allowed returns the default error::
+
+    >>> request.GET['x'] = 'a,b,x'
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    [{'location': 'query', 'description': "Failed to validate field 'x' list schema: Value 'x' for list item is not in the enumeration: ['a', 'b', 'c']"}]
+
+
 Validate JSON Body
 ==================
 
