@@ -51,7 +51,7 @@ from the schema. `JSON-Body` contains the raw json-schema in a line block::
                     <line>
                         }
 
-If the schema doesn't contain a body, the body node gets ommited::
+If the schema doesn't contain a body, the body node gets omitted::
 
     >>> schema = {
     ...     "query": {
@@ -78,7 +78,7 @@ If the schema doesn't contain a body, the body node gets ommited::
                         u: required, string
 
 If the schema doesn't contain a `query` schema the `GET-Parameters` node gets
-ommited::
+omitted::
 
     >>> schema = {
     ...     "body": {
