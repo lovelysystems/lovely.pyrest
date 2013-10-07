@@ -169,40 +169,34 @@ If the request gets performed on the decorated view the schema gets validated::
 JSONP
 -----
 
-Create a view::
+We enabled JSONP by default by setting the default renderer to `jsonp`.
+If you create a view you do not have to set anything specific.
+If the request has set a query parameter `callback=my_callback`
+the JSONP transformation will be triggered.
+Note: The name of the parameter name `callback` can be specified in the .ini
+file of the app which uses lovely.pyrest using
+`lovely.pyrest.jsonp.param_name = your_callback_function_name`.
+If you do not specify the parameter `lovely.pyrest.jsonp.param_name` the value
+will be set to the default `callback`.
+
+If you want to disable the JSONP support for a specific view, you need to
+specify a different renderer (e.g. `renderer='json'`)
+
+Create an undecorated view::
 
     >>> def my_view(request):
     ...     return {'data': 'some test data'}
 
-Create a decorated view with the JSONP support disabled::
+Disable the JSONP support and create a decorated view::
 
-    >>> jsonp = False
-    >>> decorated = decorate_view(my_view, {'jsonp': jsonp})
+    >>> renderer = 'json'
+    >>> decorated = decorate_view(my_view, {'renderer': renderer})
 
-Perform a request on the decorated view with
-query parameter `callback=my_callback`. JSONP support is disabled.
-Therefore, the request must not have set the attribute `override_renderer`::
+Perform a request on the decorated view with query parameter
+`callback=my_callback`. JSONP support is disabled.
+Therefore, the transformation is not triggered::
 
     >>> request = create_request()
     >>> request.GET['callback'] = 'my_callback'
     >>> decorated(request)
     {'data': 'some test data'}
-    >>> hasattr(request, 'override_renderer')
-    False
-
-    >>> pprint(request.errors)
-    []
-
-JSONP support is enabled. The request does have set the query parameter
-'callback'. It will not be decorated by our own decorator but later on by
-Pyramid's decorator. Therefore, the request is not decorated yet but
-does have set an attribute `override_renderer`::
-
-    >>> jsonp = True
-    >>> decorated = decorate_view(my_view, {'jsonp': jsonp})
-    >>> decorated(request)
-    {'data': 'some test data'}
-    >>> hasattr(request, 'override_renderer')
-    True
-    >>> request.override_renderer
-    'jsonp'
