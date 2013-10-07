@@ -58,7 +58,7 @@ For every view an entry in the `definitions` list gets created::
     >>> pprint(service.definitions)
     [('GET',
       <function get at ...>,
-      {'content_type': 'application/json', 'jsonp': True, 'renderer': 'json'}),
+      {'content_type': 'application/json', 'renderer': 'jsonp'}),
      ('DELETE',
       <function delete at ...>,
-      {'content_type': 'text/html', 'jsonp': True, 'renderer': 'json'})]
+      {'content_type': 'text/html', 'renderer': 'jsonp'})]

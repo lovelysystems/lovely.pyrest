@@ -13,7 +13,12 @@ from pprint import pprint
 def get_app(module):
     # scans the defined module and returns
     # a TestApp
-    config = testing.setUp()
+
+    # Settings can also be defined in a .ini file.
+    settings = {
+        'lovely.pyrest.jsonp.param_name': 'callback'
+    }
+    config = testing.setUp(settings=settings)
     config.include('lovely.pyrest')
     config.scan(module)
     return TestApp(config.make_wsgi_app())
