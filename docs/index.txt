@@ -104,3 +104,4 @@ Index
    setup.txt
    service.txt
    validation.txt
+   sphinx.txt

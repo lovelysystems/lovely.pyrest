@@ -1,0 +1,119 @@
+==========================
+Schema Directive Unit Test
+==========================
+
+Create a service which uses a defined schema::
+
+    >>> from lovely.pyrest.service import Service
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "u": {
+    ...                 "type": "string",
+    ...                 "format": "url",
+    ...                 "description": "The url"
+    ...             }
+    ...         }
+    ...     },
+    ...     "body": {
+    ...         "type": "object"
+    ...     }
+    ... }
+    >>> service = Service('service', '/service')
+    >>> @service.post(schema=schema)
+    ... def post(request):
+    ...     return {'success': True}
+
+`render_schema` creates a section with two titles (GET-Parameter, and JSON Body).
+`Get-Parameter` contains a list of all GET-Parameters with information taken
+from the schema. `JSON-Body` contains the raw json-schema in a line block::
+
+    >>> from lovely.pyrest.sphinx.schema import SchemaDirective
+    >>> out = SchemaDirective.render_schema(service, 'POST', 'unique_id')
+    >>> print render_doc_node(out)
+    <document source="<string>">
+        <section ids="unique_id_POST_schema">
+            <title>
+                GET-Parameters:
+                <list_item>
+                    <inline>
+                        u: required, string, The url,  format: url
+            <title>
+                JSON Body:
+                <line_block>
+                    <line>
+                        {
+                    <line_block>
+                        <line>
+                            "type": "object"
+                    <line>
+                        }
+
+If the schema doesn't contain a body, the body node gets ommited::
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "u": {
+    ...                 "type": "string",
+    ...             }
+    ...         }
+    ...     }
+    ... }
+    >>> service = Service('service', '/service')
+    >>> @service.post(schema=schema)
+    ... def post(request):
+    ...     return {'success': True}
+    >>> out = SchemaDirective.render_schema(service, 'POST', 'unique_id')
+    >>> print render_doc_node(out)
+    <document source="<string>">
+        <section ids="unique_id_POST_schema">
+            <title>
+                GET-Parameters:
+                <list_item>
+                    <inline>
+                        u: required, string
+
+If the schema doesn't contain a `query` schema the `GET-Parameters` node gets
+ommited::
+
+    >>> schema = {
+    ...     "body": {
+    ...         "type": "object"
+    ...     }
+    ... }
+    >>> service = Service('service', '/service')
+    >>> @service.post(schema=schema)
+    ... def post(request):
+    ...     return {'success': True}
+    >>> out = SchemaDirective.render_schema(service, 'POST', 'unique_id')
+    >>> print render_doc_node(out)
+    <document source="<string>">
+        <section ids="unique_id_POST_schema">
+            <title>
+                JSON Body:
+                <line_block>
+                    <line>
+                        {
+                    <line_block>
+                        <line>
+                            "type": "object"
+                    <line>
+                        }
+
+Try to render a method which is not defined::
+
+    >>> out = SchemaDirective.render_schema(service, 'GET', 'unique_id')
+    >>> print render_doc_node(out)
+    <document source="<string>">
+        <inline>
+
+If the service is None the rendered node is empty::
+
+    >>> out = SchemaDirective.render_schema(None, 'GET', 'uniquie')
+    >>> print render_doc_node(out)
+    <document source="<string>">
+        <inline>

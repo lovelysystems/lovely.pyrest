@@ -56,7 +56,10 @@ requires = [
 test_requires = requires + [
     'webtest',
     'collective.xmltestreport',
-    'requests'
+    'requests',
+    'docutils',
+    'sphinx',
+    'lovely.documentation'
 ]
 
 setup(name='lovely.pyrest',
