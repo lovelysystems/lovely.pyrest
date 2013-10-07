@@ -99,6 +99,6 @@ class Service(object):
             has the argument set and returns it.
         """
         for m, view, args in self.definitions:
-            if m == method:
+            if m == method.upper():
                 return args.get(key)
         return None
