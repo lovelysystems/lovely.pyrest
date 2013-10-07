@@ -174,33 +174,35 @@ Create a view::
     >>> def my_view(request):
     ...     return {'data': 'some test data'}
 
-Create a decorated view with the JSONP support enabled::
+Create a decorated view with the JSONP support disabled::
 
-    >>> jsonp = True
+    >>> jsonp = False
     >>> decorated = decorate_view(my_view, {'jsonp': jsonp})
 
-Perform a request on the not decorated view::
+Perform a request on the decorated view with
+query parameter `callback=my_callback`. JSONP support is disabled.
+Therefore, the request must not have set the attribute `override_renderer`::
 
     >>> request = create_request()
-    >>> my_view(request)
+    >>> request.GET['callback'] = 'my_callback'
+    >>> decorated(request)
     {'data': 'some test data'}
+    >>> hasattr(request, 'override_renderer')
+    False
 
     >>> pprint(request.errors)
     []
 
-JSONP support is enabled, the request does not have set the query parameter
-'callback'. Therefore, the request is not a callback::
+JSONP support is enabled. The request does have set the query parameter
+'callback'. It will not be decorated by our own decorator but later on by
+Pyramid's decorator. Therefore, the request is not decorated yet but
+does have set an attribute `override_renderer`::
 
+    >>> jsonp = True
+    >>> decorated = decorate_view(my_view, {'jsonp': jsonp})
     >>> decorated(request)
     {'data': 'some test data'}
-
-Set the query parameter 'callback'.
-If the parameter is set, we override the renderer and set it to 'jsonp'.
-Note: The response will not be decorated at by our own decorator!
-Therefore, you will get the unaltered JSON data::
-
-    >>> request.GET['callback'] = 'my_callback'
-    >>> decorated(request)
-    {'data': 'some test data'}
+    >>> hasattr(request, 'override_renderer')
+    True
     >>> request.override_renderer
     'jsonp'
