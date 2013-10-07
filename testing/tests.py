@@ -48,5 +48,6 @@ def test_suite():
         create_suite('../docs/index.txt'),
         create_suite('../docs/service.txt'),
         create_suite('../docs/validation.txt'),
+        create_suite('../docs/jsonp.txt'),
     ))
     return s

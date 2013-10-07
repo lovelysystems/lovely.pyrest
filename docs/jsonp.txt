@@ -1,0 +1,34 @@
+.. Shared Source Software
+   Copyright (c) 2013, Lovely Systems GmbH
+
+=============
+JSONP Support
+=============
+
+To make safer cross-domain request we support JSONP by default.
+Taking advantage of this feature is rather simple. Add `callback=your_callback`
+as query parameter to the request:
+
+.. literalinclude:: examples/create_service.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.create_service')
+    >>> print app.get('/svc?callback=your_callback')
+    Response: 200 OK
+    Content-Type: application/javascript; charset=UTF-8
+    your_callback({"title": "Hello World!"})
+
+As stated above we support JSONP by default. To disable the support for a specific view set `jsonp=False` as follows:
+
+.. literalinclude:: examples/jsonp_example.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.jsonp_example')
+    >>> print app.get('/svc?callback=your_callback')
+    Response: 200 OK
+    Content-Type: application/json; charset=UTF-8
+    {"title": "Hello World!"}

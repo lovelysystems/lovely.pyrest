@@ -9,6 +9,7 @@ Changes for Lovey Pyrest
 ================
 
 - added JSONP support
+- added documentation
 
 2013/10/02 0.0.3
 ================
