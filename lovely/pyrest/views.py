@@ -51,7 +51,7 @@ def enable_jsonp_support(request):
     the response will be wrapped as JSONP callback with the assigned
     value of 'callback'.
 
-    We override the renderer of the requerst with 'jsonp'.
+    We override the renderer of the request with 'jsonp'.
     Note: The renderer does have to be added to the config (see:
     http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/renderers.html#jsonp-renderer)
     """

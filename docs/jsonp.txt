@@ -5,11 +5,13 @@
 JSONP Support
 =============
 
-To make safer cross-domain request we support JSONP by default.
-Taking advantage of this feature is rather simple. Add `callback=your_callback`
-as query parameter to the request:
+We support JSONP by default so you do not have to set anything specific
+when creating a service and/or view.
 
 .. literalinclude:: examples/create_service.py
+
+To take advantage of this feature add `callback=your_callback`
+as query parameter to your request:
 
 .. doctest::
     :hide:
@@ -20,7 +22,8 @@ as query parameter to the request:
     Content-Type: application/javascript; charset=UTF-8
     your_callback({"title": "Hello World!"})
 
-As stated above we support JSONP by default. To disable the support for a specific view set `jsonp=False` as follows:
+As stated above we support JSONP by default.
+To disable the support for a specific view set `jsonp=False` as follows:
 
 .. literalinclude:: examples/jsonp_example.py
 
