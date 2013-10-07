@@ -7,6 +7,8 @@ import json
 
 
 class SchemaDirective(Directive):
+    """ The Schema directive renders the information about GET-Parameter and
+        JSON-Body of a specific service. """
 
     has_content = True
     required_arguments = 3
@@ -23,15 +25,21 @@ class SchemaDirective(Directive):
 
     @staticmethod
     def render_schema(service, method, service_id):
+        """ Renders schema information of a service """
+        # check if service is not null
         if not service:
             return empty_node()
         schema = service.get_argument('schema', method)
+        # check that the schema exists
         if not schema:
             return empty_node()
         schema_id = "%s_%s_%s" % (service_id,
                                   method,
                                   'schema')
         node = nodes.section(ids=[schema_id])
+        # if the schema contains a `query` schema render GET-Parameters
+        # documentation:
+        # <name>: <required>, <type>, <description>, <other arguments>
         if 'query' in schema and 'properties' in schema['query']:
             title = nodes.title(text='GET-Parameters:')
             properties = schema['query']['properties']
@@ -64,6 +72,8 @@ class SchemaDirective(Directive):
 
                 title += prop_node
             node += title
+        # if the schema has a `body` schema convert it to string and
+        # insert it into the documentation
         if 'body' in schema:
             body_schema = schema['body']
             title = nodes.title(text='JSON Body:')

@@ -60,7 +60,7 @@ def render_doc(rst_path):
 def get_app(module):
     # scans the defined module and returns
     # a TestApp
-    config = testing.setUp(settings={'lovely.pyrest.jsonp': False})
+    config = testing.setUp()
     config.include('lovely.pyrest')
     config.scan(module)
     return TestApp(config.make_wsgi_app())

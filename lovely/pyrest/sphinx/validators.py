@@ -6,6 +6,7 @@ from docutils import nodes
 
 
 class ValidatorsDirective(Directive):
+    """ The Validators directive renders the validators docstrings """
 
     has_content = True
     required_arguments = 3

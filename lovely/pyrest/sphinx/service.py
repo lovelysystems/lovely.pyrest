@@ -8,6 +8,7 @@ from lovely.pyrest.sphinx.validators import ValidatorsDirective
 
 
 class ServiceDirective(Directive):
+    """ The Service directive renders all services defined in a module """
 
     has_content = True
     required_arguments = 1

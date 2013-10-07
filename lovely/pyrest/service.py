@@ -95,7 +95,9 @@ class Service(object):
         return arguments
 
     def get_argument(self, key, method):
-        """ Returns the argument for the method """
+        """ Checks if any of the defined views with the method
+            has the argument set and returns it.
+        """
         for m, view, args in self.definitions:
             if m == method:
                 return args.get(key)

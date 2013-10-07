@@ -10,6 +10,7 @@ Features
     - raise a 405 if an unimplemented method is called on a servie
     - provides schema validation using validictory
     - raises correct errors if the `Accept` or `Content-Type` header doesn't match
+    - sphinx extension to automatically generate service documentation
 
 Development Setup
 =================
