@@ -38,28 +38,26 @@ def decorate_view(view, args):
         if len(request.errors) > 0:
             return JSONError(request.errors, request.errors.status)
         response = _view(request)
+        # check for jsonp support
         if jsonp:
-            response = add_jsonp_callback(request, response)
+            enable_jsonp_support(request)
         return response
     functools.wraps(wrapper)
     return wrapper
 
 
-def add_jsonp_callback(request, response):
+def enable_jsonp_support(request):
     """ If request.GET contains the query parameter 'callback'
     the response will be wrapped as JSONP callback with the assigned
     value of 'callback'.
 
     We override the renderer of the requerst with 'jsonp'.
-    Note: The renderer does hav to be added to the config (see:
+    Note: The renderer does have to be added to the config (see:
     http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/renderers.html#jsonp-renderer)
     """
 
-    # check if either 'callback' is set.
     if 'callback' in request.GET:
         request.override_renderer = 'jsonp'
-
-    return response
 
 
 class JSONError(HTTPError):
