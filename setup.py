@@ -51,13 +51,16 @@ requires = [
     'gevent',
     'pyramid',
     'validictory',
+    'docutils',
     'rfc3987'
 ]
 
 test_requires = requires + [
     'webtest',
     'collective.xmltestreport',
-    'requests'
+    'requests',
+    'sphinx',
+    'lovely.documentation'
 ]
 
 setup(name='lovely.pyrest',

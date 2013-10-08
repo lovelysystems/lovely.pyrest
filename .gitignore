@@ -3,6 +3,7 @@
 *.egg-info
 out/
 bin/
+out/
 develop-eggs/
 parts/
 .DS\_Store

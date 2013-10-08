@@ -1,0 +1,81 @@
+===========================
+Service Directive Unit Test
+===========================
+
+Create a service::
+
+    >>> from lovely.pyrest.service import Service
+    >>> def validator(request):
+    ...     """ Validates something"""
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "u": {
+    ...                 "type": "string",
+    ...             }
+    ...         }
+    ...     },
+    ...     "body": {
+    ...         "type": "object"
+    ...     }
+    ... }
+    >>> service = Service('service', '/service',
+    ...                   description='My Service')
+    >>> @service.get(schema=schema, validators=[validator],
+    ...              accept='application/json', content_type='application/json')
+    ... def get(request):
+    ...     return {'success': True}
+
+The `ServiceDirective` renders a service documentation including:
+
+    - Description
+    - Content-Type header
+    - Accept header
+    - Validators
+    - Schema
+
+    >>> from lovely.pyrest.sphinx.service import ServiceDirective
+    >>> out = ServiceDirective.render(service, 'unique_id')
+    >>> print render_doc_node(out)
+    <document source="<string>">
+        <section ids="unique_id">
+            <title>
+                service service - /service
+            <paragraph>
+                My Service
+            <section ids="unique_id_GET">
+                <title>
+                    GET
+                <inline>
+                    Accept: application/json
+                <inline>
+                    Content-Types: application/json
+                <section ids="unique_id_GET_schema">
+                    <title>
+                        GET-Parameters:
+                        <list_item>
+                            <inline>
+                                u: required, string
+                    <title>
+                        JSON Body:
+                        <line_block>
+                            <line>
+                                {
+                            <line_block>
+                                <line>
+                                    "type": "object"
+                            <line>
+                                }
+                <section ids="service_unique_id_GET_validators">
+                    <title>
+                        Validation:
+                        <paragraph>
+                            Validates something
+
+.. note::
+
+    Rendering of `Validators` and `Schema` is provided by the `SchemaDirective`
+    and `ValidatorsDirective`. Those Directives are tested separately.
+
+    
