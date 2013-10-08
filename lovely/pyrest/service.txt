@@ -62,3 +62,17 @@ For every view an entry in the `definitions` list gets created::
      ('DELETE',
       <function delete at ...>,
       {'content_type': 'text/html', 'renderer': 'json'})]
+
+Get arguments
+=============
+
+It's possible to get the value of an argument for a specific http method:
+
+    >>> service.get_argument('content_type', 'GET')
+    'application/json'
+
+    >>> service.get_argument('content_type', 'get')
+    'application/json'
+
+    >>> print service.get_argument('doesnotexist', 'doesnotexist')
+    None

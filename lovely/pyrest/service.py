@@ -11,6 +11,20 @@ DEFAULTS = {
     'renderer': 'json'
 }
 
+SERVICES = []
+
+
+def get_services():
+    return SERVICES
+
+
+def get_service(name):
+    """ Returns the service """
+    for s in SERVICES:
+        if s.name == name:
+            return s
+    return None
+
 
 class Service(object):
 
@@ -28,6 +42,10 @@ class Service(object):
             config.add_service(self)
         # attach the callback to venusian so it gets called at scan
         info = venusian.attach(self, callback, category='pyramid', depth=depth)
+
+        # add the service to the SERVICES list
+        # this is needed for autogenerating documentation
+        SERVICES.append(self)
 
         # add aliases for the decorators
         for m in METHODS:
@@ -75,3 +93,12 @@ class Service(object):
         # update the defaults with the passed args
         arguments.update(args)
         return arguments
+
+    def get_argument(self, key, method):
+        """ Checks if any of the defined views with the method
+            has the argument set and returns it.
+        """
+        for m, view, args in self.definitions:
+            if m == method.upper():
+                return args.get(key)
+        return None
