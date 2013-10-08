@@ -5,6 +5,7 @@ from lovely.pyrest.predicates import ContentTypePredicate
 from lovely.pyrest.views import get_fallback_view, decorate_view
 from pyramid.events import NewRequest
 from errors import Errors
+from pyramid.renderers import JSONP
 import copy
 
 __version__ = "0.0.5"
@@ -21,7 +22,7 @@ def add_service(config, service):
         args['request_method'] = method
         decorated_view = decorate_view(view, dict(args))
         # remove args which are unknown by pyramid
-        for item in ('validators', 'schema'):
+        for item in ('validators', 'schema', 'jsonp'):
             if item in args:
                 del args[item]
 
@@ -50,3 +51,18 @@ def includeme(config):
     config.add_directive('add_service', add_service)
     config.add_subscriber(wrap_request, NewRequest)
     config.add_view_predicate('content_type', ContentTypePredicate)
+    add_custom_config(config)
+
+
+def add_custom_config(config):
+    """ Custom configuration parameters in your .ini file
+    will be handled here.
+    """
+    settings = config.get_settings()
+
+    # Add JSONP support
+    # If param_name is set as qeury parameter in a request it will trigger
+    # the JSONP transformation.
+    # 'callback' will be set as default if `param_name` is not specified.
+    param_name = settings.get('lovely.pyrest.jsonp.param_name', 'callback')
+    config.add_renderer('jsonp', JSONP(param_name=param_name))

@@ -42,6 +42,7 @@ def decorate_view(view, args):
     return wrapper
 
 
+
 class JSONError(HTTPError):
 
     def __init__(self, errors, status=400):

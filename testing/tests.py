@@ -60,7 +60,12 @@ def render_doc(rst_path):
 def get_app(module):
     # scans the defined module and returns
     # a TestApp
-    config = testing.setUp()
+
+    # Settings can also be defined in a .ini file.
+    settings = {
+        'lovely.pyrest.jsonp.param_name': 'callback'
+    }
+    config = testing.setUp(settings=settings)
     config.include('lovely.pyrest')
     config.scan(module)
     return TestApp(config.make_wsgi_app())
@@ -97,5 +102,6 @@ def test_suite():
         create_suite('../docs/service.txt'),
         create_suite('../docs/validation.txt'),
         create_suite('../docs/sphinx.txt'),
+        create_suite('../docs/jsonp.txt'),
     ))
     return s

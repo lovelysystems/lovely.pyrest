@@ -106,3 +106,4 @@ Index
    service.txt
    validation.txt
    sphinx.txt
+   jsonp.txt

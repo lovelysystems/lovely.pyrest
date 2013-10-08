@@ -8,7 +8,7 @@ import functools
 METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PURGE']
 
 DEFAULTS = {
-    'renderer': 'json'
+    'renderer': 'jsonp'
 }
 
 SERVICES = []

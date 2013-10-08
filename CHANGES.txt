@@ -8,10 +8,12 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+ - enabled JSONP support
+
 2013/10/08 0.0.5
 ================
 
- - added sphinx extension to generate service documentation automatically 
+ - added sphinx extension to generate service documentation automatically
 
 2013/10/04 0.0.4
 ================
