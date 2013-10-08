@@ -200,3 +200,76 @@ Therefore, the transformation is not triggered::
     >>> request.GET['callback'] = 'my_callback'
     >>> decorated(request)
     {'data': 'some test data'}
+
+Help Support
+------------
+
+If a request contains the query parameter `help` the defined `schema` will be
+displayed as a documentation to show which query parameters can (or must)
+be present in a request.
+This feature is enabled by default. This feature can be turned off for each
+view by setting `help` to `False`
+
+If and API endpoint does not accept any query parameters (i.e. schema is
+empty) an appropriate message will be returned.
+
+Create an undecorated view::
+
+    >>> def my_view(request):
+    ...     return {'data': 'awesome test data'}
+
+Decorate the view without a schema::
+
+    >>> schema = {}
+    >>> decorated = decorate_view(my_view, {'schema': schema})
+
+Perform a request on the decorated view with the query parameter
+`help`. The response should state that no specific query parameters
+are required.
+
+    >>> request = create_request()
+    >>> request.GET['help'] = ''
+    >>> decorated(request)
+    {'help': 'This API endpoint does not accept any specific query parameters'}
+
+Decorate the view with a schema::
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "param1": {
+    ...                 "type": "string",
+    ...                 "format": "url",
+    ...             },
+    ...             "param2": {
+    ...                 "type": "string",
+    ...                 "format": "url",
+    ...                 "required": False
+    ...             }
+    ...         }
+    ...     }
+    ... }
+    >>> decorated = decorate_view(my_view, {'schema': schema})
+
+Perform a request on the decorated view with the query parameter
+`help`. The schema should be responded as help.
+
+    >>> request = create_request()
+    >>> request.GET['help'] = ''
+    >>> decorated(request)
+    {'query': {'type': 'object', 'properties': {'param2': {'required': False, 'type': 'string', 'format': 'url'}, 'param1': {'type': 'string', 'format': 'url'}}}}
+
+
+Decorate a view with the same schema as before and turn off the help function.
+The same request as before will be used. The `help` query parameter is set.
+Now, the request is validated again even if the query parameter `help`
+is set because the help function is turned off::
+
+    >>> decorated = decorate_view(my_view, {'schema': schema, 'help': False})
+    >>> response = decorated(request)
+    >>> response.status
+    '400 Bad Request'
+    >>> request.errors
+    [{'location': 'query', 'description': "Required field 'param1' is missing"}]
+

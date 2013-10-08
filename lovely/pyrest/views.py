@@ -8,8 +8,14 @@ from pyramid.response import Response
 from pyramid.exceptions import PredicateMismatch
 from errors import Errors
 from lovely.pyrest.validation import validate_schema
+from lovely.pyrest.service import DEFAULTS
 import json
 import functools
+
+# Default message if a request with query parameter `help` is processed
+# and the request does not have defined a schema.
+DEFAULT_HELP_MESSAGE = {'help': 'This API endpoint does not accept any '
+                                + 'specific query parameters'}
 
 
 def decorate_view(view, args):
@@ -20,8 +26,31 @@ def decorate_view(view, args):
     :param view: the view to decorate
     :param args: the args to use for the decoration
     """
+    def get_help_message(request):
+        """ Checks if 'help' is set as query parameter in a request.
+        If so, the schema will be displayed as a documentation
+        to show which query parameters can (or must) be present in a reqeust.
+
+        If and API endpoint does not accept any query parameters
+        (i.e. schema is empty) an appropriate message will be returned.
+        """
+        schema = args.get('schema')
+        response = None
+        if 'help' in request.GET:
+            if schema:
+                response = schema
+            else:
+                response = DEFAULT_HELP_MESSAGE
+        return response
 
     def wrapper(request):
+        help = args.get('help', DEFAULTS.get('help'))
+        if help:
+            response = get_help_message(request)
+            # do not validate anything else. show the help imediately.
+            if response is not None:
+                return response
+
         _view = view
         validators = args.get('validators', ())
         schema = args.get('schema')
@@ -38,6 +67,7 @@ def decorate_view(view, args):
             return JSONError(request.errors, request.errors.status)
         response = _view(request)
         return response
+
     functools.wraps(wrapper)
     return wrapper
 
