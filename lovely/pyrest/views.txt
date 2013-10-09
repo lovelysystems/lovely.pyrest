@@ -255,10 +255,26 @@ Decorate the view with a schema::
 Perform a request on the decorated view with the query parameter
 `help`. The schema should be responded as help.
 
+    >>> import json
     >>> request = create_request()
     >>> request.GET['help'] = ''
-    >>> decorated(request)
-    {'query': {'type': 'object', 'properties': {'param2': {'required': False, 'type': 'string', 'format': 'url'}, 'param1': {'type': 'string', 'format': 'url'}}}}
+    >>> print json.dumps(decorated(request), indent=4)
+    {
+        "query": {
+            "type": "object",
+            "properties": {
+                "param2": {
+                    "required": false,
+                    "type": "string",
+                    "format": "url"
+                },
+                "param1": {
+                    "type": "string",
+                    "format": "url"
+                }
+            }
+        }
+    }
 
 
 Decorate a view with the same schema as before and turn off the help function.
