@@ -15,7 +15,7 @@ as follows:
 
     `{'help': 'This API endpoint does not accept any specific query parameters'}`
 
-One does not have to set anything specific when creating a view:
+The help feature is enabled by default, so you just have to create a service:
 
 .. doctest::
     :hide:
@@ -29,10 +29,10 @@ One does not have to set anything specific when creating a view:
 .. doctest::
     :hide:
 
-    To take advantage of this feature add `help`
-    as query parameter to your request:
-
     >>> app = get_app('testing.examples.help_example')
+
+The service returns the schema as help information::
+
     >>> print app.get('/svc?help')
     Response: 200 OK
     Content-Type: application/json; charset=UTF-8
