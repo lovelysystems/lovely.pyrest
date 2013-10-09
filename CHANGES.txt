@@ -8,7 +8,10 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
- - added help function
+2013/10/09 0.0.7
+================
+
+ - Services provide help functionality by default
 
 2013/10/08 0.0.6
 ================
