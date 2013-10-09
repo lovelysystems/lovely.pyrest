@@ -22,7 +22,7 @@ def add_service(config, service):
         args['request_method'] = method
         decorated_view = decorate_view(view, dict(args))
         # remove args which are unknown by pyramid
-        for item in ('validators', 'schema', 'jsonp'):
+        for item in ('validators', 'schema', 'jsonp', 'help'):
             if item in args:
                 del args[item]
 

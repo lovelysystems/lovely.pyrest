@@ -103,5 +103,6 @@ def test_suite():
         create_suite('../docs/validation.txt'),
         create_suite('../docs/sphinx.txt'),
         create_suite('../docs/jsonp.txt'),
+        create_suite('../docs/help.txt'),
     ))
     return s
