@@ -57,6 +57,34 @@ Add the required `GET` parameter with a correct url::
     >>> request.errors
     []
 
+`Number` and `integer` types get converted to int or float before validation::
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "int": {
+    ...                 "type": "integer"
+    ...             },
+    ...             "number": {
+    ...                 "type": "number"
+    ...             }
+    ...         }
+    ...     }
+    ... }
+
+    >>> request = create_request()
+    >>> request.GET['int'] = '1234'
+    >>> request.GET['number'] = '1234.5'
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    []
+
+    >>> request.GET['int'] = 'hallo'
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    [{'location': 'query', 'description': "invalid literal for int() with base 10: 'hallo'"}]
+
 Schema type 'array' and query params
 ----------------------------------
 

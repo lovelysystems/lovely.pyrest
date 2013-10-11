@@ -8,6 +8,11 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+2013/10/11 0.0.8
+================
+
+ - number conversation for query parameters 
+
 2013/10/09 0.0.7
 ================
 

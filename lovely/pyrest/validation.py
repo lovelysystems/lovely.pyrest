@@ -34,6 +34,14 @@ def validate_schema(request, schema):
                     v = params.get(prop)
                     if v is not None:
                         params[prop] = v.split(",")
+                if o.get('type') == 'integer':
+                    v = params.get(prop)
+                    if v is not None:
+                        params[prop] = int(v)
+                if o.get('type') == 'number':
+                    v = params.get(prop)
+                    if v is not None:
+                        params[prop] = float(v)
             # for convenience remember the params_dict on the request
             request.params_dict = params
             validictory.validate(params, query_schema,
