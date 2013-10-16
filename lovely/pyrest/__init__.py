@@ -8,7 +8,7 @@ from errors import Errors
 from pyramid.renderers import JSONP
 import copy
 
-__version__ = "0.0.9"
+__version__ = "0.0.10"
 
 
 def add_service(config, service):
