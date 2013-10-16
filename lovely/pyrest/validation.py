@@ -25,7 +25,9 @@ def validate_schema(request, schema):
     if query_schema is not None:
         try:
             # convert GET parameters to a dictionary which can be validated
-            params = {k: request.GET[k] for k in request.GET}
+            params = {}
+            for k in request.GET:
+                params[k] = request.GET[k]
             for prop, o in query_schema.get('properties').iteritems():
                 # if schema type is array, split the parameter string by comma
                 # and replace the original string value with the generated

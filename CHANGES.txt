@@ -8,6 +8,11 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+2013/10/11 0.0.9
+================
+
+ - changed schema validation for compatibility
+
 2013/10/11 0.0.8
 ================
 
