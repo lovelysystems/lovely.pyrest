@@ -46,10 +46,11 @@ def validate_schema(request, schema):
                         params[prop] = float(v)
                 if o.get('type') == 'boolean':
                     v = params.get(prop)
-                    if v.lower() == 'true':
-                        params[prop] = True
-                    else:
-                        params[prop] = False
+                    if v is not None:
+                        if v.lower() == 'true':
+                            params[prop] = True
+                        else:
+                            params[prop] = False
             # for convenience remember the params_dict on the request
             request.params_dict = params
             validictory.validate(params, query_schema,

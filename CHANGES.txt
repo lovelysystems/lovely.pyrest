@@ -8,6 +8,11 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+2013/10/11 0.0.11
+=================
+
+ - bugfix: fixed query validation
+
 2013/10/11 0.0.10
 =================
 
