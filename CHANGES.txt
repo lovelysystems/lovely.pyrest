@@ -8,6 +8,8 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+ - removed closed source dependencies, so this package can be open sourced
+
  - added license information
 
 2013/10/11 0.0.11

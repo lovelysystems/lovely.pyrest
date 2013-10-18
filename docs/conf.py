@@ -2,7 +2,6 @@
 # Copyright (c) 2013, Lovely Systems GmbH
 
 # -*- coding: utf-8 -*-
-from lovely.documentation.sphinx_general import *
 
 import os
 import re
@@ -34,7 +33,7 @@ nitpicky = True
 
 # load doctest extension to be able to setup testdata in the documentation that
 # is hidden in the generated html (by using .. doctest:: :hide:)
-extensions.append('sphinx.ext.doctest')
+extensions = ['sphinx.ext.doctest']
 
 # General information about the project.
 project = u'lovely.pyrest'
@@ -43,4 +42,4 @@ copyright = u'2013, Lovely Systems GmbH'
 version = release = docs_version
 exclude_patterns = ['lovely.pyrest.egg-info', 'parts', 'checkouts']
 
-html_theme = 'lovelysystems'
+html_theme = 'pyramid'
