@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Shared Source Software
-# Copyright (c) 2006-2012, Lovely Systems GmbH
-
-
 # check if everything is committed
 CLEAN=`git status -s`
 if [ ! -z "$CLEAN" ]

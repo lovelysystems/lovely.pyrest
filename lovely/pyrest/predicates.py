@@ -1,7 +1,3 @@
-# Shared Source Software
-# Copyright (c) 2013, Lovely Systems GmbH
-
-
 class ContentTypePredicate(object):
     """
     Predicate for matching the `Content-type` request header.

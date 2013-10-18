@@ -1,6 +1,3 @@
-# Shared Source Software
-# Copyright (c) 2013, Lovely Systems GmbH
-
 from lovely.pyrest.service import Service
 
 """ This module contains several service definitions with

@@ -1,7 +1,3 @@
-# Shared Source Software
-# Copyright (c) 2013 Lovely Systems GmbH
-
-
 class Errors(list):
     """ A list object which holds a dictionary of errors. And a status code """
 
