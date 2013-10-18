@@ -8,6 +8,8 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+ - added license information
+
 2013/10/11 0.0.11
 =================
 

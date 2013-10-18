@@ -60,7 +60,6 @@ test_requires = requires + [
     'collective.xmltestreport',
     'requests',
     'sphinx',
-    'lovely.documentation'
 ]
 
 setup(name='lovely.pyrest',
@@ -77,6 +76,7 @@ setup(name='lovely.pyrest',
       author_email='office@lovelysystems.com',
       url='https://github.com/lovelysystems/lovely.pyrest',
       keywords='pyramid rest framework',
+      license='Apache License 2.0',
       packages=find_packages(),
       namespace_packages=['lovely'],
       include_package_data=True,
