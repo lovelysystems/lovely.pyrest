@@ -1,6 +1,3 @@
-# Shared Source Software
-# Copyright (c) 2013, Lovely Systems GmbH
-
 import unittest
 import doctest
 import requests
@@ -16,11 +13,10 @@ from pprint import pprint
 from lovely.pyrest.service import SERVICES
 
 DOC_CONF = """
-from lovely.documentation.sphinx_general import *
 extensions = ['lovely.pyrest.sphinx']
 source_suffix = '.txt'
 master_doc = 'index'
-html_theme = 'lovelysystems'
+html_theme = 'pyramid'
 """
 
 

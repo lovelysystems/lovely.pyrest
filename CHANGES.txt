@@ -1,12 +1,13 @@
-.. Shared Source Software
-   Copyright (c) 2013 Lovely Systems GmbH
-
 ========================
 Changes for Lovey Pyrest
 ========================
 
 unreleased
 ==========
+
+ - removed closed source dependencies, so this package can be open sourced
+
+ - added license information
 
 2013/10/11 0.0.11
 =================

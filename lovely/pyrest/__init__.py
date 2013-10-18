@@ -1,6 +1,3 @@
-# Shared Source Software
-# Copyright (c) 2013 Lovely Systems GmbH
-
 from lovely.pyrest.predicates import ContentTypePredicate
 from lovely.pyrest.views import get_fallback_view, decorate_view
 from pyramid.events import NewRequest

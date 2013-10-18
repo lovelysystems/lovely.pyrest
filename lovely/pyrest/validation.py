@@ -1,6 +1,3 @@
-# Shared Source Software
-# Copyright (c) 2013, Lovely Systems GmbH
-
 from rfc3987 import get_compiled_pattern
 from validictory import ValidationError
 import validictory

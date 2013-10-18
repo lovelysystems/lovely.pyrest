@@ -1,5 +1,3 @@
-# Shared Source Software
-# Copyright (c) 2013, Lovely Systems GmbH
 from pyramid.httpexceptions import (HTTPMethodNotAllowed,
                                     HTTPError,
                                     HTTPUnsupportedMediaType,
@@ -70,7 +68,6 @@ def decorate_view(view, args):
 
     functools.wraps(wrapper)
     return wrapper
-
 
 
 class JSONError(HTTPError):
