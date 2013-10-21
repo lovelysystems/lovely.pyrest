@@ -5,6 +5,9 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+2013/10/21 0.1.0
+================
+
  - added information how to publish documentation on gh-pages
 
  - auto-doc: fixed bug where normal text gets included in <h4> tag
