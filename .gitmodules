@@ -1,0 +1,4 @@
+[submodule "gh-pages"]
+	path = gh-pages
+	url = git@github.com:lovelysystems/lovely.pyrest.git
+	branch = gh-pages
