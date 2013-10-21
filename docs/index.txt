@@ -2,16 +2,34 @@
 Lovely PyRest Documentation
 ===========================
 
-Lovely Pyrest provides helpers to build REST-Webservices with pyramid.
+Lovely Pyrest is an extension for
+`Pyramid <http://www.pylonsproject.org/projects/pyramid/about>` to easily create
+REST-Services. It provides functionallity to define service endpoints with the
+following features:
 
 Features
 ========
 
-    - raise a 405 if an unimplemented method is called on a servie
-    - provides schema validation using validictory
-    - raises correct errors if the `Accept` or `Content-Type` header doesn't match
-    - sphinx extension to automatically generate service documentation
-    - display help for an API endpoint
+    - Sphinx extension to automatically generate documentation
+    - It's possible to get help information of every endpoint
+    - Automatic schema-validation based on `jsonschema <http://json-schema.org/>`
+    - returns correct error codes if request method is not supportet or `Accept`-
+      or `Content-Type`-Headers dont't match
+
+
+Index
+=====
+
+.. toctree::
+   :maxdepth: 2
+   :titlesonly:
+
+   setup.txt
+   service.txt
+   validation.txt
+   sphinx.txt
+   jsonp.txt
+   help.txt
 
 
 First Example
@@ -91,18 +109,3 @@ If the validation fails also a json error response gets returned::
         ],
         "status": "error"
     }
-
-
-Index
-=====
-
-.. toctree::
-   :maxdepth: 2
-   :titlesonly:
-
-   setup.txt
-   service.txt
-   validation.txt
-   sphinx.txt
-   jsonp.txt
-   help.txt
