@@ -9,16 +9,16 @@ DEFAULTS = {
     'help': True            # enable 'help' by default
 }
 
-SERVICES = []
+SERVICES = {}
 
 
 def get_services():
-    return SERVICES
+    return SERVICES.values()
 
 
 def get_service(name):
     """ Returns the service """
-    for s in SERVICES:
+    for s in SERVICES.values():
         if s.name == name:
             return s
     return None
@@ -26,12 +26,14 @@ def get_service(name):
 
 class Service(object):
 
-    def __init__(self, name, path, description=None, depth=1, **kw):
+    def __init__(self, name, path, description=None, depth=1):
         self.name = name
         self.path = path
         self.description = description
         self.definitions = []
         self.methods = []
+
+        SERVICES[self.name] = self
 
         # this callback gets called when config.scan() gets triggered
         # and registers the service itself
@@ -40,10 +42,6 @@ class Service(object):
             config.add_service(self)
         # attach the callback to venusian so it gets called at scan
         info = venusian.attach(self, callback, category='pyramid', depth=depth)
-
-        # add the service to the SERVICES list
-        # this is needed for autogenerating documentation
-        SERVICES.append(self)
 
         # add aliases for the decorators
         for m in METHODS:

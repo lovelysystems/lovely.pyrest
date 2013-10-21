@@ -49,7 +49,6 @@ requires = [
     'pyramid',
     'validictory',
     'docutils',
-    'rfc3987'
 ]
 
 test_requires = requires + [

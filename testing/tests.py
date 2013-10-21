@@ -32,7 +32,7 @@ def render_doc(rst_path):
         html output """
 
     # Remove all existing services
-    del SERVICES[:]
+    SERVICES.clear()
     with _temp_dir() as tmp:
         out_dir = os.path.join(tmp, 'out')
         in_dir = os.path.join(tmp, 'in')

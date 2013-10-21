@@ -1,19 +1,18 @@
-from rfc3987 import get_compiled_pattern
-from validictory import ValidationError
 import validictory
 
-URL = get_compiled_pattern('^%(URI)s$')
 
+def number(s):
+    try:
+        return int(s)
+    except ValueError:
+        return float(s)
 
-def validate_format_url(validator, fieldname, value, format_option):
-    if URL.match(value) is None:
-        raise ValidationError("Value '%s' of field '%s' is not an url" % (value, fieldname))
-
-
-FORMAT_VALIDATORS = {
-    "url": validate_format_url
+CONVERSION = {
+    "integer": lambda s: int(s),
+    "number": number,
+    "boolean": lambda s: True if s.lower() == "true" else False,
+    "array": lambda s: s.split(","),
 }
-FORMAT_VALIDATORS.update(validictory.validator.DEFAULT_FORMAT_VALIDATORS)
 
 
 def validate_schema(request, schema):
@@ -21,37 +20,21 @@ def validate_schema(request, schema):
     query_schema = schema.get("query")
     if query_schema is not None:
         try:
-            # convert GET parameters to a dictionary which can be validated
+            # Because all GET-Parameters are strings try to convert them
+            # into the format specified in the schema
             params = {}
             for k in request.GET:
                 params[k] = request.GET[k]
             for prop, o in query_schema.get('properties').iteritems():
-                # if schema type is array, split the parameter string by comma
-                # and replace the original string value with the generated
-                # array for the validation
-                if o.get('type') == 'array':
+                stype = o.get('type')
+                if stype in CONVERSION:
+                    converter = CONVERSION[stype]
                     v = params.get(prop)
                     if v is not None:
-                        params[prop] = v.split(",")
-                if o.get('type') == 'integer':
-                    v = params.get(prop)
-                    if v is not None:
-                        params[prop] = int(v)
-                if o.get('type') == 'number':
-                    v = params.get(prop)
-                    if v is not None:
-                        params[prop] = float(v)
-                if o.get('type') == 'boolean':
-                    v = params.get(prop)
-                    if v is not None:
-                        if v.lower() == 'true':
-                            params[prop] = True
-                        else:
-                            params[prop] = False
+                        params[prop] = converter(v)
             # for convenience remember the params_dict on the request
             request.params_dict = params
-            validictory.validate(params, query_schema,
-                                 format_validators=FORMAT_VALIDATORS)
+            validictory.validate(params, query_schema)
         except ValueError, error:
             request.errors.add('query',
                                error.message)
@@ -59,8 +42,7 @@ def validate_schema(request, schema):
     if body_schema is not None:
         try:
             json_body = request.json_body
-            validictory.validate(json_body, body_schema,
-                                 format_validators=FORMAT_VALIDATORS)
+            validictory.validate(json_body, body_schema)
         except ValueError, error:
             request.errors.add('body',
                                error.message)

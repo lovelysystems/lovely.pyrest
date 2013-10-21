@@ -9,11 +9,12 @@ __version__ = "0.0.11"
 
 
 def add_service(config, service):
-    """ Registers a service at config """
-    services = config.registry.setdefault('services', {})
-    services[service.path] = service
-    # keep track of the registered routes
-    registered_routes = []
+    """ registers the views for a service """
+    # register the route
+    config.add_route(service.name, service.path)
+    # create the fallback view
+    config.add_view(view=get_fallback_view(service),
+                    route_name=service.name)
     for method, view, args in service.definitions:
         args = copy.deepcopy(args)  # make a copy of the dict to not modify it
         args['request_method'] = method
@@ -22,16 +23,8 @@ def add_service(config, service):
         for item in ('validators', 'schema', 'jsonp', 'help'):
             if item in args:
                 del args[item]
-
-        # if the route is new, add the route and add the
-        # `fallback_view` for this route
-        if service.path not in registered_routes:
-            config.add_route(service.name, service.path)
-            config.add_view(view=get_fallback_view(service),
-                            route_name=service.name)
-            registered_routes.append(service.path)
-            config.commit()
         config.add_view(view=decorated_view, route_name=service.name, **args)
+    config.commit()
 
 
 def wrap_request(event):

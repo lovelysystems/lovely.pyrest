@@ -19,7 +19,6 @@ Lets create a schema to validate the query parameters::
     ...         "properties": {
     ...             "u": {
     ...                 "type": "string",
-    ...                 "format": "url"
     ...             }
     ...         }
     ...     }
@@ -42,14 +41,6 @@ If validation fails an entry gets added to the requests error object::
     [{'location': 'query', 'description': "Required field 'u' is missing"}]
 
 Add the required `GET` parameter::
-
-    >>> request.errors = Errors()
-    >>> request.GET['u'] = 'not-a-valid-url'
-    >>> validate_schema(request, schema)
-    >>> request.errors
-    [{'location': 'query', 'description': "Value 'not-a-valid-url' of field 'u' is not an url"}]
-
-Add the required `GET` parameter with a correct url::
 
     >>> request.errors = Errors()
     >>> request.GET['u'] = 'http://doesnotexist.com'
@@ -131,6 +122,75 @@ Using a value that is not allowed returns the default error::
     >>> validate_schema(request, schema)
     >>> request.errors
     [{'location': 'query', 'description': "Failed to validate field 'x' list schema: Value 'x' for list item is not in the enumeration: ['a', 'b', 'c']"}]
+
+
+Conversation
+------------
+
+Because GET-Parameter are always strings it's necessary to convert those strings
+to the correct types::
+
+    >>> schema = {
+    ...     "query": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "array": {
+    ...                 "type": "array",
+    ...             },
+    ...             "int": {
+    ...                 "type": "integer"
+    ...             },
+    ...             "number": {
+    ...                 "type": "number"
+    ...             },
+    ...             "boolean": {
+    ...                 "type": "boolean"
+    ...             },
+    ...             "any": {
+    ...                 "type": "any"
+    ...             },
+    ...             "string": {
+    ...                 "type": "string"
+    ...             },
+    ...             "dynamic": {
+    ...             }
+    ...         }
+    ...     }
+    ... }
+
+    >>> request = Request({})
+    >>> request.errors = Errors()
+    >>> request.GET['array'] = "a,b,"
+    >>> request.GET['int'] = "123"
+    >>> request.GET['number'] = "123.5"
+    >>> request.GET['boolean'] = "true"
+    >>> request.GET['any'] = "any"
+    >>> request.GET['string'] = "This is a string"
+    >>> request.GET['dynamic'] = "dynamic"
+    >>> validate_schema(request, schema)
+    >>> print request.errors
+    []
+
+    >>> pprint(request.params_dict)
+    {'any': 'any',
+     'array': ['a', 'b', ''],
+     'boolean': True,
+     'dynamic': 'dynamic',
+     'int': 123,
+     'number': 123.5,
+     'string': 'This is a string'}
+
+Number
+~~~~~~
+
+    >>> from lovely.pyrest.validation import number
+    >>> number("10")
+    10
+    >>> number(".5")
+    0.5
+    >>> number("text")
+    Traceback (most recent call last):
+    ValueError: could not convert string to float: text
 
 
 Validate JSON Body
