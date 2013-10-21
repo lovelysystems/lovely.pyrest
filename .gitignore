@@ -8,3 +8,4 @@ develop-eggs/
 parts/
 .DS\_Store
 .installed.cfg
+dist/
