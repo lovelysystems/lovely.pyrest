@@ -1,0 +1,238 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Generate Documentation &mdash; lovely.pyrest 0.0.11 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="lovely.pyrest 0.0.11 documentation" href="index.html" />
+    <link rel="next" title="JSONP Support" href="jsonp.html" />
+    <link rel="prev" title="Validation" href="validation.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="jsonp.html" title="JSONP Support"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="validation.html" title="Validation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="generate-documentation">
+<h1>Generate Documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Lovely PyRest provides a sphinx extension to generate service documentation.
+The generated documentation contains:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Service Description</li>
+<li>HTTP-Method overview</li>
+<li>Accept Header</li>
+<li>Content-Type Header</li>
+<li>Validators</li>
+<li>GET-Parameters and JSON Body</li>
+</ul>
+</div></blockquote>
+<div class="section" id="include-the-extension">
+<h2>Include the extension<a class="headerlink" href="#include-the-extension" title="Permalink to this headline">¶</a></h2>
+<p>To include the extension add the following line to the <cite>config.py</cite> in your
+Spinx-Project:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;lovely.pyrest.sphinx&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>If you have other extensions use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">extensions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;lovely.pyrest.sphinx&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Assume you have a Service with validators and a Schema:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">articles</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;article&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/article/{id}&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">article_exists</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Validates that the article exists &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<span class="nd">@articles.get</span><span class="p">(</span><span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">article_exists</span><span class="p">],</span> <span class="n">accept</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns an article &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;the title&#39;</span><span class="p">}</span>
+
+
+<span class="c"># Create a schema to validate the body</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;body&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s">&quot;properites&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="nd">@articles.post</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Save an article &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;created&#39;</span><span class="p">:</span> <span class="s">&#39;123&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>To automatically generate the documentation include the <cite>service</cite> directive
+in your rst file like in this:</p>
+<div class="highlight-python"><pre>Articles
+========
+
+Description
+-----------
+
+.. service:: testing.examples.sphinx
+</pre>
+</div>
+<p>This is the <a class="reference download internal" href="_downloads/sphinx_out.html"><tt class="xref download docutils literal"><span class="pre">generated</span> <span class="pre">documentation</span></tt></a>.</p>
+</div>
+<div class="section" id="directives">
+<h2>Directives<a class="headerlink" href="#directives" title="Permalink to this headline">¶</a></h2>
+<p>Lovely PyRest provides three directives to autogenerate the documentation.</p>
+<div class="section" id="service-directive">
+<h3>Service Directive<a class="headerlink" href="#service-directive" title="Permalink to this headline">¶</a></h3>
+<p>The Service directive renders all services defined in a module.
+This modulde must be provided as argument:</p>
+<div class="highlight-python"><pre>.. service:: myapp.service</pre>
+</div>
+</div>
+<div class="section" id="schema-directive">
+<h3>Schema Directive<a class="headerlink" href="#schema-directive" title="Permalink to this headline">¶</a></h3>
+<p>The Schema directive inserts only the information about GET-Parameter and JSON-Body
+of a specific service. The Service Directive also provides this information.
+This directive needs three arguments:</p>
+<div class="highlight-python"><pre>.. schema::
+    myapp.articles  # The module which contains the service
+    article         # The service
+    GET             # The HTTP method</pre>
+</div>
+</div>
+<div class="section" id="validators-directive">
+<h3>Validators Directive<a class="headerlink" href="#validators-directive" title="Permalink to this headline">¶</a></h3>
+<p>Like the Schema Directive the Validatiors directive provides only information
+about validation. This information is also included in the Service Directive.
+This Directive has the same arguments as the Schema Directive:</p>
+<div class="highlight-python"><pre>.. validators::
+    myapp.articles  # The module which contains the service
+    article         # The service
+    GET             # The HTTP method</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Generate Documentation</a><ul>
+<li><a class="reference internal" href="#include-the-extension">Include the extension</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#directives">Directives</a><ul>
+<li><a class="reference internal" href="#service-directive">Service Directive</a></li>
+<li><a class="reference internal" href="#schema-directive">Schema Directive</a></li>
+<li><a class="reference internal" href="#validators-directive">Validators Directive</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="validation.html"
+                        title="previous chapter">Validation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jsonp.html"
+                        title="next chapter">JSONP Support</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="jsonp.html" title="JSONP Support"
+             >next</a></li>
+        <li class="right" >
+          <a href="validation.html" title="Validation"
+             >previous</a> |</li>
+        <li><a href="index.html">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lovely Systems GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

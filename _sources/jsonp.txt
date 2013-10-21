@@ -1,0 +1,43 @@
+=============
+JSONP Support
+=============
+
+We enabled JSONP support by default by setting the default renderer to `jsonp`.
+If you create a view you do not have to set anything specific.
+If the request has set a query parameter `callback=my_callback`
+the JSONP transformation will be triggered.
+
+.. note:: The parameter name `callback` can be specified
+    in the .ini file of the app which uses lovely.pyrest using
+    `lovely.pyrest.jsonp.param_name = your_callback_function_name`.
+    If you do not specify the parameter `lovely.pyrest.jsonp.param_name`
+    the value will be set to the default `callback`.
+
+.. literalinclude:: examples/create_service.py
+
+.. doctest::
+    :hide:
+
+    To take advantage of this feature add `callback=your_callback`
+    as query parameter to your request:
+
+    >>> app = get_app('testing.examples.create_service')
+    >>> print app.get('/svc?callback=your_callback')
+    Response: 200 OK
+    Content-Type: application/javascript; charset=UTF-8
+    your_callback({"title": "Hello World!"})
+
+As stated above we enabled JSONP by default.
+To disable the JSONP support for a specific view simply set the
+`renderer` to `json`:
+
+.. literalinclude:: examples/jsonp_example.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.jsonp_example')
+    >>> print app.get('/svc?callback=your_callback')
+    Response: 200 OK
+    Content-Type: application/json; charset=UTF-8
+    {"title": "Hello World!"}

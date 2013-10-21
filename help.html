@@ -1,0 +1,158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Help &mdash; lovely.pyrest 0.0.11 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="lovely.pyrest 0.0.11 documentation" href="index.html" />
+    <link rel="prev" title="JSONP Support" href="jsonp.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="jsonp.html" title="JSONP Support"
+             accesskey="P">previous</a></li>
+        <li><a href="index.html">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="help">
+<h1>Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h1>
+<p>By default every API endpoint is able to show a help message by adding
+<cite>help</cite> as query parameter to a request.
+The help message contains the defined <cite>schema</cite> to indicate which query
+parameters can (or must) be set to a request.</p>
+<p>If the API endpoint does not accept any query parameters the help message is
+as follows:</p>
+<blockquote>
+<div><cite>{&#8216;help&#8217;: &#8216;This API endpoint does not accept any specific query parameters&#8217;}</cite></div></blockquote>
+<p>The help feature is enabled by default, so you just have to create a service:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">svc</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;svc&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/svc&#39;</span><span class="p">)</span>
+
+<span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s">&quot;required&quot;</span><span class="p">:</span> <span class="bp">False</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@svc.get</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Hello World!&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The service returns the schema as help information:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/svc?help&#39;</span><span class="p">)</span>
+<span class="go">Response: 200 OK</span>
+<span class="go">Content-Type: application/json; charset=UTF-8</span>
+<span class="go">{&quot;query&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;id&quot;: {&quot;required&quot;: false, &quot;type&quot;: &quot;string&quot;}}}}</span>
+</pre></div>
+</div>
+<p>As stated above the help feature is enabled by default.
+To disable the help feature for a specific view simply set the
+<cite>help</cite> to <cite>False</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">svc</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;svc&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/svc&#39;</span><span class="p">)</span>
+
+<span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s">&quot;required&quot;</span><span class="p">:</span> <span class="bp">False</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@svc.get</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Hello World!&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jsonp.html"
+                        title="previous chapter">JSONP Support</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="jsonp.html" title="JSONP Support"
+             >previous</a></li>
+        <li><a href="index.html">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lovely Systems GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

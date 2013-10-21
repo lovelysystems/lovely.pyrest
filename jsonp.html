@@ -1,0 +1,142 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>JSONP Support &mdash; lovely.pyrest 0.0.11 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="lovely.pyrest 0.0.11 documentation" href="index.html" />
+    <link rel="next" title="Help" href="help.html" />
+    <link rel="prev" title="Generate Documentation" href="sphinx.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="help.html" title="Help"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="sphinx.html" title="Generate Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="jsonp-support">
+<h1>JSONP Support<a class="headerlink" href="#jsonp-support" title="Permalink to this headline">¶</a></h1>
+<p>We enabled JSONP support by default by setting the default renderer to <cite>jsonp</cite>.
+If you create a view you do not have to set anything specific.
+If the request has set a query parameter <cite>callback=my_callback</cite>
+the JSONP transformation will be triggered.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The parameter name <cite>callback</cite> can be specified
+in the .ini file of the app which uses lovely.pyrest using
+<cite>lovely.pyrest.jsonp.param_name = your_callback_function_name</cite>.
+If you do not specify the parameter <cite>lovely.pyrest.jsonp.param_name</cite>
+the value will be set to the default <cite>callback</cite>.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">svc</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;svc&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/svc&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@svc.get</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Hello World!&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>As stated above we enabled JSONP by default.
+To disable the JSONP support for a specific view simply set the
+<cite>renderer</cite> to <cite>json</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">svc</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;svc&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/svc&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@svc.get</span><span class="p">(</span><span class="n">renderer</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Hello World!&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sphinx.html"
+                        title="previous chapter">Generate Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="help.html"
+                        title="next chapter">Help</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="help.html" title="Help"
+             >next</a></li>
+        <li class="right" >
+          <a href="sphinx.html" title="Generate Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lovely Systems GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
