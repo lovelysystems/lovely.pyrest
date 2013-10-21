@@ -5,6 +5,9 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+2013/10/21 0.1.1
+================
+
  - removed development info from README and rephrased the introduction
 
 2013/10/21 0.1.0
