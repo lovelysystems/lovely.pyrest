@@ -42,13 +42,13 @@ class ServiceDirective(Directive):
             acceptables = service.acceptables(method)
             if len(acceptables) > 0:
                 accept = 'Accept: ' + ', '.join(acceptables)
-                method_node += nodes.inline(text=accept)
+                method_node += create_node(accept)
 
             # Render Content-Type Header documentation
             content_types = service.content_types(method)
             if len(content_types) > 0:
                 ct = 'Content-Types: ' + ', '.join(content_types)
-                method_node += nodes.inline(text=ct)
+                method_node += create_node(ct)
 
             if 'schema' in args:
                 method_node += SchemaDirective.render_schema(service,

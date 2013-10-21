@@ -42,11 +42,10 @@ class ValidatorsDirective(Directive):
                                                   method,
                                                   'validators')
             validator_section = nodes.section(ids=[validators_id])
-            validator_title = nodes.title(text='Validation:')
+            validator_section += nodes.title(text='Validation:')
             # add the rendered_nodes to the validator_title
             for node in rendered_nodes:
-                validator_title += node
-            validator_section += validator_title
+                validator_section += node
             return validator_section
         # Return an empty node if none of the validators has a docstring
         return empty_node()

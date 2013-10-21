@@ -47,31 +47,31 @@ The `ServiceDirective` renders a service documentation including:
             <section ids="unique_id_GET">
                 <title>
                     GET
-                <inline>
+                <paragraph>
                     Accept: application/json
-                <inline>
+                <paragraph>
                     Content-Types: application/json
                 <section ids="unique_id_GET_schema">
                     <title>
                         GET-Parameters:
-                        <list_item>
-                            <inline>
-                                u: required, string
+                    <list_item>
+                        <inline>
+                            u: required, string
                     <title>
                         JSON Body:
+                    <line_block>
+                        <line>
+                            {
                         <line_block>
                             <line>
-                                {
-                            <line_block>
-                                <line>
-                                    "type": "object"
-                            <line>
-                                }
+                                "type": "object"
+                        <line>
+                            }
                 <section ids="service_unique_id_GET_validators">
                     <title>
                         Validation:
-                        <paragraph>
-                            Validates something
+                    <paragraph>
+                        Validates something
 
 .. note::
 

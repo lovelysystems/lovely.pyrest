@@ -5,6 +5,8 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+ - auto-doc: fixed bug where normal text gets included in <h4> tag
+
  - removed closed source dependencies, so this package can be open sourced
 
  - added license information

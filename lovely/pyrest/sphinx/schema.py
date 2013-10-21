@@ -42,6 +42,7 @@ class SchemaDirective(Directive):
         # <name>: <required>, <type>, <description>, <other arguments>
         if 'query' in schema and 'properties' in schema['query']:
             title = nodes.title(text='GET-Parameters:')
+            node +=title
             properties = schema['query']['properties']
             for param, spec in properties.iteritems():
                 prop_node = nodes.list_item()
@@ -70,8 +71,7 @@ class SchemaDirective(Directive):
                 desc += ', '.join(extras)
                 prop_node += nodes.inline(text=desc)
 
-                title += prop_node
-            node += title
+                node += prop_node
         # if the schema has a `body` schema convert it to string and
         # insert it into the documentation
         if 'body' in schema:
@@ -81,6 +81,6 @@ class SchemaDirective(Directive):
             # prefix every line with a pipe, so the rst conversation returns a
             # line_block where the spaces are preserved
             text = '\n'.join(['| ' + l for l in text.splitlines()])
-            title += create_node(trim(text))
             node += title
+            node += create_node(trim(text))
         return node
