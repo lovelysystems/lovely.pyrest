@@ -3,7 +3,7 @@ Lovely PyRest Documentation
 ===========================
 
 Lovely Pyrest is an extension for
-`Pyramid <http://www.pylonsproject.org/projects/pyramid/about>` to easily create
+`Pyramid <http://www.pylonsproject.org/projects/pyramid/about>`_ to easily create
 REST-Services. It provides functionallity to define service endpoints with the
 following features:
 
@@ -12,7 +12,7 @@ Features
 
     - Sphinx extension to automatically generate documentation
     - It's possible to get help information of every endpoint
-    - Automatic schema-validation based on `jsonschema <http://json-schema.org/>`
+    - Automatic schema-validation based on `jsonschema <http://json-schema.org/>`_
     - returns correct error codes if request method is not supportet or `Accept`-
       or `Content-Type`-Headers dont't match
 

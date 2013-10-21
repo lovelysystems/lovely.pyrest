@@ -5,6 +5,11 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+2013/10/21 0.1.2
+================
+
+ - fixed wrong hyperlinks in documentation
+
 2013/10/21 0.1.1
 ================
 
