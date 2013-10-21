@@ -12,6 +12,12 @@ Features
     - raises correct errors if the `Accept` or `Content-Type` header doesn't match
     - sphinx extension to automatically generate service documentation
 
+Documentation
+=============
+
+Take a look at the `documentation <http://http://lovelysystems.github.io/lovely.pyrest/>`_
+for usage information.
+
 Development Setup
 =================
 
@@ -48,8 +54,29 @@ For additional testrunner options run::
 Generating Documentation
 ========================
 
+Before generating the new documentation make sure the `gh-pages` submodule is up-to-date::
+
+    git submodule init
+
+    git submodule update
+
 To generate the new documentation run::
 
     ./bin/sphinx-html
 
-The documentation is located in the `out` directory
+The documentation is located in the `gh-pages` directory which points to the
+`gh-pages` submodule.
+
+Publish documentation
+---------------------
+
+To publish the documentation commit the changed files in the `gh-pages`
+submodule::
+
+    cd gh-pages
+
+    git add <changed-files>
+
+    git commit -m "updated documentation"
+
+    git push origin gh-pages
