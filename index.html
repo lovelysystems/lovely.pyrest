@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Lovely PyRest Documentation &mdash; lovely.pyrest 0.0.11 documentation</title>
+    <title>Lovely PyRest Documentation &mdash; lovely.pyrest 0.1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.0.11',
+        VERSION:     '0.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="lovely.pyrest 0.0.11 documentation" href="#" />
+    <link rel="top" title="lovely.pyrest 0.1.1 documentation" href="#" />
     <link rel="next" title="Setup a Project using Lovely PyRest" href="setup.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -41,7 +41,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              accesskey="N">next</a></li>
-        <li><a href="#">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+        <li><a href="#">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,18 +52,40 @@
             
   <div class="section" id="lovely-pyrest-documentation">
 <h1>Lovely PyRest Documentation<a class="headerlink" href="#lovely-pyrest-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Lovely Pyrest provides helpers to build REST-Webservices with pyramid.</p>
+<p>Lovely Pyrest is an extension for
+<cite>Pyramid &lt;http://www.pylonsproject.org/projects/pyramid/about&gt;</cite> to easily create
+REST-Services. It provides functionallity to define service endpoints with the
+following features:</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>raise a 405 if an unimplemented method is called on a servie</li>
-<li>provides schema validation using validictory</li>
-<li>raises correct errors if the <cite>Accept</cite> or <cite>Content-Type</cite> header doesn&#8217;t match</li>
-<li>sphinx extension to automatically generate service documentation</li>
-<li>display help for an API endpoint</li>
+<li>Sphinx extension to automatically generate documentation</li>
+<li>It&#8217;s possible to get help information of every endpoint</li>
+<li>Automatic schema-validation based on <cite>jsonschema &lt;http://json-schema.org/&gt;</cite></li>
+<li>returns correct error codes if request method is not supportet or <cite>Accept</cite>-
+or <cite>Content-Type</cite>-Headers dont&#8217;t match</li>
 </ul>
 </div></blockquote>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup a Project using Lovely PyRest</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">Creating Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sphinx.html">Generate Documentation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jsonp.html">JSONP Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
+</ul>
+</div>
 </div>
 <div class="section" id="first-example">
 <h2>First Example<a class="headerlink" href="#first-example" title="Permalink to this headline">¶</a></h2>
@@ -179,25 +201,6 @@ If the validation fails also a json error response gets returned:</p>
 </div>
 </div>
 </div>
-<div class="section" id="index">
-<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup a Project using Lovely PyRest</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="service.html">Creating Services</a></li>
-<li class="toctree-l1"><a class="reference internal" href="validation.html">Validation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sphinx.html">Generate Documentation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="jsonp.html">JSONP Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
-</ul>
-</div>
-</div>
 </div>
 
 
@@ -210,13 +213,13 @@ If the validation fails also a json error response gets returned:</p>
   <ul>
 <li><a class="reference internal" href="#">Lovely PyRest Documentation</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#index">Index</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#first-example">First Example</a><ul>
 <li><a class="reference internal" href="#error-responses">Error responses</a></li>
 <li><a class="reference internal" href="#schema-validation">Schema Validation</a></li>
 <li><a class="reference internal" href="#custom-validator">Custom Validator</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#index">Index</a><ul>
 </ul>
 </li>
 </ul>
@@ -249,7 +252,7 @@ If the validation fails also a json error response gets returned:</p>
         <li class="right" style="margin-right: 10px">
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              >next</a></li>
-        <li><a href="#">lovely.pyrest 0.0.11 documentation</a> &raquo;</li> 
+        <li><a href="#">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
