@@ -295,3 +295,18 @@ Add the required parameter as an invalid 'int'::
     >>> validate_schema(request, schema)
     >>> request.errors
     [{'location': 'body', 'description': "The value '123' of 'name' is not null or a string"}]
+
+Prepare a string with a unicode encoding and
+validate the schema::
+
+    >>> from lovely.pyrest.validation import FORMAT_VALIDATORS
+    >>> import validictory
+    >>> dict = {'name': u'An ordinary valid string'}
+    >>> body_schema = schema.get("body")
+    >>> try:
+    ...     validictory.validate(dict, body_schema,
+    ...                          format_validators=FORMAT_VALIDATORS)
+    ... except ValueError, error:
+    ...     error.message
+
+
