@@ -17,7 +17,8 @@ CONVERSION = {
 
 def nullable_string(validator, fieldname, value, format_option):
     if value is None or not isinstance(value, basestring):
-        raise ValueError("'{0}' is not null or a string".format(value))
+        raise ValueError("The value '{0}' of '{1}' is not null or a string"
+            .format(value, fieldname))
 
 
 FORMAT_VALIDATORS = {

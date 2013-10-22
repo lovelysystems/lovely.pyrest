@@ -294,4 +294,4 @@ Add the required parameter as an invalid 'int'::
     >>> request.body = json.dumps({'name': 123})
     >>> validate_schema(request, schema)
     >>> request.errors
-    [{'location': 'body', 'description': "'123' is not null or a string"}]
+    [{'location': 'body', 'description': "The value '123' of 'name' is not null or a string"}]

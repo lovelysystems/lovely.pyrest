@@ -142,7 +142,7 @@ or none:
     {
         "errors": [
             {
-                "description": "'123' is not null or a string",
+                "description": "The value '123' of 'title' is not null or a string",
                 "location": "body"
             }
         ],
