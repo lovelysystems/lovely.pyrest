@@ -245,3 +245,53 @@ The body schema could also contain a list instead of an object::
     >>> pprint(request.errors)
     [{'description': "Length of list [] for field '_data' is not equal to length of schema list",
       'location': 'body'}]
+
+Schema type 'nullableString'
+----------------------------
+
+Sometimes one needs to have a nullable string value. Lets set the schema type
+to 'nullableString'. The value of the parameter is being validated to be a
+valid 'string' or 'null' (='None'). If none of the conditions match an
+appropriate error message is being returned.
+
+Create the schema with type 'nullableString'::
+
+    >>> schema = {
+    ...     "body": {
+    ...         "type": "object",
+    ...         "properties": {
+    ...             "name": {
+    ...                 "type": "any",
+    ...                 "format": "nullableString"
+    ...             }
+    ...         }
+    ...     }
+    ... }
+
+Create a request object::
+
+    >>> request = Request({})
+    >>> request.errors = Errors()
+
+Add the required parameter as a valid 'string'::
+
+    >>> request.body = json.dumps({'name': 'An ordinary valid string'})
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    []
+
+Add the required parameter as a valid 'None'::
+
+    >>> request = create_request()
+    >>> request.body = json.dumps({'name': None})
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    []
+
+Add the required parameter as an invalid 'int'::
+
+    >>> request = create_request()
+    >>> request.body = json.dumps({'name': 123})
+    >>> validate_schema(request, schema)
+    >>> request.errors
+    [{'location': 'body', 'description': "'123' is not null or a string"}]

@@ -1,5 +1,5 @@
 import validictory
-
+from validictory.validator import DEFAULT_FORMAT_VALIDATORS
 
 def number(s):
     try:
@@ -13,6 +13,17 @@ CONVERSION = {
     "boolean": lambda s: True if s.lower() == "true" else False,
     "array": lambda s: s.split(","),
 }
+
+
+def nullable_string(validator, fieldname, value, format_option):
+    if value is None or not isinstance(value, basestring):
+        raise ValueError("'{0}' is not null or a string".format(value))
+
+
+FORMAT_VALIDATORS = {
+    "nullableString": nullable_string
+}
+FORMAT_VALIDATORS.update(DEFAULT_FORMAT_VALIDATORS)
 
 
 def validate_schema(request, schema):
@@ -34,7 +45,8 @@ def validate_schema(request, schema):
                         params[prop] = converter(v)
             # for convenience remember the params_dict on the request
             request.params_dict = params
-            validictory.validate(params, query_schema)
+            validictory.validate(params, query_schema,
+                                 format_validators=FORMAT_VALIDATORS)
         except ValueError, error:
             request.errors.add('query',
                                error.message)
@@ -42,7 +54,8 @@ def validate_schema(request, schema):
     if body_schema is not None:
         try:
             json_body = request.json_body
-            validictory.validate(json_body, body_schema)
+            validictory.validate(json_body, body_schema,
+                                 format_validators=FORMAT_VALIDATORS)
         except ValueError, error:
             request.errors.add('body',
                                error.message)
