@@ -124,7 +124,7 @@ Using a value that is not allowed returns the default error::
     [{'location': 'query', 'description': "Failed to validate field 'x' list schema: Value 'x' for list item is not in the enumeration: ['a', 'b', 'c']"}]
 
 
-Conversation
+Conversion
 ------------
 
 Because GET-Parameter are always strings it's necessary to convert those strings
