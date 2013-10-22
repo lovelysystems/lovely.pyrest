@@ -118,3 +118,33 @@ It's possible to use multiple validators.
         ],
         "status": "error"
     }
+
+Nullable String
+---------------
+
+Lovely PyRest provides a custom 'nullable string' format validator by default.
+Define a schema as follows to be able to assign 'null' to a parameter. The
+format validator checks if the assigned value is a valid string
+or none:
+
+.. literalinclude:: examples/schema_validation_nullable_string.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.schema_validation_nullable_string')
+
+    >>> res = app.post_json('/article', {'title': 123}, expect_errors=True)
+    >>> print res.status
+    400 Bad Request
+
+    >>> print_json(res.body)
+    {
+        "errors": [
+            {
+                "description": "'123' is not null or a string",
+                "location": "body"
+            }
+        ],
+        "status": "error"
+    }
