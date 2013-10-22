@@ -1,6 +1,7 @@
 import validictory
 from validictory.validator import DEFAULT_FORMAT_VALIDATORS
 
+
 def number(s):
     try:
         return int(s)
