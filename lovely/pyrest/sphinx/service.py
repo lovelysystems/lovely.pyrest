@@ -7,18 +7,31 @@ from lovely.pyrest.sphinx.schema import SchemaDirective
 from lovely.pyrest.sphinx.validators import ValidatorsDirective
 
 
+def convert_to_list(value):
+    if value is None:
+        return []
+    return [v.strip() for v in value.split(',')]
+
+
 class ServiceDirective(Directive):
     """ The Service directive renders all services defined in a module """
 
     has_content = True
     required_arguments = 1
 
+    option_spec = {'services': convert_to_list}
+
     def run(self):
         module = self.arguments[0]
         import_module(module)
         rendered = []
         settings = self.state.document.settings
+        # fetch all services
         services = get_services()
+        # if the services option is set render only the named services
+        names = self.options.get('services')
+        if names:
+            services = [s for s in services if s.name in names]
         for service in services:
             service_id = "service_%d" % settings.env.new_serialno('service')
             rendered.append(ServiceDirective.render(service, service_id))
