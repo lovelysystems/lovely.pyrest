@@ -5,6 +5,9 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+ - added `services` option to sphinx directive to avoid duplicate rendering
+   of service docs
+
 2013/10/21 0.1.2
 ================
 

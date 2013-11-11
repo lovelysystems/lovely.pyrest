@@ -78,4 +78,17 @@ The `ServiceDirective` renders a service documentation including:
     Rendering of `Validators` and `Schema` is provided by the `SchemaDirective`
     and `ValidatorsDirective`. Those Directives are tested separately.
 
-    
+Convert to List
+===============
+
+Converts a comma separated string into a list::
+
+    >>> from lovely.pyrest.sphinx.service import convert_to_list
+    >>> convert_to_list(None)
+    []
+
+    >>> convert_to_list('  a   , b   ')
+    ['a', 'b']
+
+    >>> convert_to_list('a,b,,')
+    ['a', 'b', '', '']
