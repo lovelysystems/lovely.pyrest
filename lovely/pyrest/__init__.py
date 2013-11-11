@@ -1,5 +1,9 @@
 from lovely.pyrest.predicates import ContentTypePredicate
-from lovely.pyrest.views import get_fallback_view, decorate_view
+from lovely.pyrest.views import (
+    get_fallback_view,
+    decorate_view,
+    JSONP_SETTINGS
+)
 from pyramid.events import NewRequest
 from errors import Errors
 from pyramid.renderers import JSONP
@@ -54,5 +58,10 @@ def add_custom_config(config):
     # If param_name is set as qeury parameter in a request it will trigger
     # the JSONP transformation.
     # 'callback' will be set as default if `param_name` is not specified.
-    param_name = settings.get('lovely.pyrest.jsonp.param_name', 'callback')
+    param_name = settings.get(
+        JSONP_SETTINGS['param_name_ini'],
+        JSONP_SETTINGS['param_name']                    # default
+    )
+    # override the default
+    JSONP_SETTINGS['param_name'] = param_name
     config.add_renderer('jsonp', JSONP(param_name=param_name))

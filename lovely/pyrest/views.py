@@ -15,6 +15,11 @@ import functools
 DEFAULT_HELP_MESSAGE = {'help': 'This API endpoint does not accept any '
                                 + 'specific query parameters'}
 
+JSONP_SETTINGS = {
+    'param_name_ini': 'lovely.pyrest.jsonp.param_name',  # in the .ini file
+    'param_name': 'callback',
+}
+
 
 def decorate_view(view, args):
     """ Adds a decorator to a `pyramid` view.
@@ -62,7 +67,12 @@ def decorate_view(view, args):
         # validaton fails.
         # check if there are errors and return an ErrorResponse if so
         if len(request.errors) > 0:
-            return JSONError(request.errors, request.errors.status)
+            if JSONP_SETTINGS['param_name'] in request.GET:
+                response = create_json_errors(request.errors)
+                response['http_status'] = request.errors.status
+                return response
+            else:
+                return JSONError(request.errors, request.errors.status)
         response = _view(request)
         return response
 
@@ -70,10 +80,18 @@ def decorate_view(view, args):
     return wrapper
 
 
+def create_json_errors(errors):
+    errors = {
+        'status': 'error',
+        'errors': errors
+    }
+    return errors
+
+
 class JSONError(HTTPError):
 
     def __init__(self, errors, status=400):
-        body = {'status': 'error', 'errors': errors}
+        body = create_json_errors(errors)
         # HTTPError is derived from Response
         super(Response, self).__init__(json.dumps(body))
         self.status = status
