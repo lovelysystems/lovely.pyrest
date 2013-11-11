@@ -198,6 +198,39 @@ Therefore, the transformation is not triggered::
     >>> decorated(request)
     {'data': 'some test data'}
 
+JSONP error handling
+--------------------
+
+If the JSONP query parameter is set, the HTTP response will always be '200 OK'.
+If an error occured (e.g. not all required parameters specified by the
+schema are set in a request) the error message can be processed by the
+JSONP function.
+The error message is like all the other error messages with one addition;
+the 'http_status' is being added::
+
+Create a view with enabled JSONP support::
+
+    >>> def my_view(request):
+    ...     return {'data': 'some test data'}
+    >>> renderer = 'jsonp'
+    >>> decorated = decorate_view(my_view, {'renderer': renderer})
+
+Create the request::
+
+    >>> request = create_request()
+    >>> request.GET['callback'] = 'my_callback'
+
+Simulate an error::
+
+    >>> request.errors = Errors()
+    >>> request.errors.add('query', 'A required parameter was not set')
+    >>> request.errors.status = 400
+
+Perform the request::
+
+    >>> decorated(request)
+    {'status': 'error', 'errors': [{'location': 'query', 'description': 'A required parameter was not set'}], 'http_status': 400}
+
 Help Support
 ------------
 
