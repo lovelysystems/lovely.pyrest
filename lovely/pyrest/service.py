@@ -1,13 +1,9 @@
 import venusian
 import functools
+from lovely.pyrest.settings import DEFAULT_VIEW_SETTINGS as DEFAULTS
 
 
 METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PURGE']
-
-DEFAULTS = {
-    'renderer': 'jsonp',
-    'help': True            # enable 'help' by default
-}
 
 SERVICES = {}
 

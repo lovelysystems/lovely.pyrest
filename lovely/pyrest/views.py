@@ -6,7 +6,8 @@ from pyramid.response import Response
 from pyramid.exceptions import PredicateMismatch
 from errors import Errors
 from lovely.pyrest.validation import validate_schema
-from lovely.pyrest.service import DEFAULTS
+from lovely.pyrest.settings import DEFAULT_VIEW_SETTINGS
+from lovely.pyrest.settings import JSONP_SETTINGS
 import json
 import functools
 
@@ -14,11 +15,6 @@ import functools
 # and the request does not have defined a schema.
 DEFAULT_HELP_MESSAGE = {'help': 'This API endpoint does not accept any '
                                 + 'specific query parameters'}
-
-JSONP_SETTINGS = {
-    'param_name_ini': 'lovely.pyrest.jsonp.param_name',  # in the .ini file
-    'param_name': 'callback',
-}
 
 
 def decorate_view(view, args):
@@ -47,7 +43,7 @@ def decorate_view(view, args):
         return response
 
     def wrapper(request):
-        help = args.get('help', DEFAULTS.get('help'))
+        help = args.get('help', DEFAULT_VIEW_SETTINGS.get('help'))
         if help:
             response = get_help_message(request)
             # do not validate anything else. show the help imediately.
