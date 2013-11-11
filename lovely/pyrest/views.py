@@ -6,15 +6,13 @@ from pyramid.response import Response
 from pyramid.exceptions import PredicateMismatch
 from errors import Errors
 from lovely.pyrest.validation import validate_schema
-from lovely.pyrest.settings import DEFAULT_VIEW_SETTINGS
-from lovely.pyrest.settings import JSONP_SETTINGS
+from lovely.pyrest.settings import (
+    DEFAULT_VIEW_SETTINGS,
+    DEFAULT_HELP_MESSAGE,
+    JSONP_SETTINGS
+)
 import json
 import functools
-
-# Default message if a request with query parameter `help` is processed
-# and the request does not have defined a schema.
-DEFAULT_HELP_MESSAGE = {'help': 'This API endpoint does not accept any '
-                                + 'specific query parameters'}
 
 
 def decorate_view(view, args):
