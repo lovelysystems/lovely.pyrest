@@ -5,6 +5,9 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+2013/11/12 0.1.4
+================
+
  - New JSONP error handling. If an error occurs while processing a JSONP
  request, the HTTP response will always be '200 OK'. The error message
  can be processed in the JSONP callback.
