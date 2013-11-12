@@ -41,3 +41,27 @@ To disable the JSONP support for a specific view simply set the
     Response: 200 OK
     Content-Type: application/json; charset=UTF-8
     {"title": "Hello World!"}
+
+
+JSONP Error Handling
+---------------------
+
+When performing a JSONP request the service always responses with the HTTP
+response '200 OK'. If an error occured while processing the request (e.g. not
+all required query parameters are set) the error message can be processed by
+the JSONP callback function.
+The error message will be the same as shown in
+`Validation <validation.html>`_ with the additional attribute 'http_status'.
+
+.. literalinclude:: examples/jsonp_error_handling.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.jsonp_error_handling')
+    >>> print app.get('/svc/error?callback=your_callback')
+    Response: 200 OK
+    Content-Type: application/javascript; charset=UTF-8
+    your_callback({"status": "error", "errors": [{"location": "query", "description": "Required field 'id' is missing"}], "http_status": 400})
+
+

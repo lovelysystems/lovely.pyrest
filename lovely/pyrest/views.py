@@ -6,14 +6,13 @@ from pyramid.response import Response
 from pyramid.exceptions import PredicateMismatch
 from errors import Errors
 from lovely.pyrest.validation import validate_schema
-from lovely.pyrest.service import DEFAULTS
+from lovely.pyrest.settings import (
+    DEFAULT_VIEW_SETTINGS,
+    DEFAULT_HELP_MESSAGE,
+    get_jsonp_param_name
+)
 import json
 import functools
-
-# Default message if a request with query parameter `help` is processed
-# and the request does not have defined a schema.
-DEFAULT_HELP_MESSAGE = {'help': 'This API endpoint does not accept any '
-                                + 'specific query parameters'}
 
 
 def decorate_view(view, args):
@@ -42,7 +41,7 @@ def decorate_view(view, args):
         return response
 
     def wrapper(request):
-        help = args.get('help', DEFAULTS.get('help'))
+        help = args.get('help', DEFAULT_VIEW_SETTINGS.get('help'))
         if help:
             response = get_help_message(request)
             # do not validate anything else. show the help imediately.
@@ -62,18 +61,37 @@ def decorate_view(view, args):
         # validaton fails.
         # check if there are errors and return an ErrorResponse if so
         if len(request.errors) > 0:
-            return JSONError(request.errors, request.errors.status)
+            if is_jsonp_request(request):
+                # if JSONP is requested return a HTTP 200 OK and create an
+                # error message. Pyramid wraps the message with given
+                # JSONP function name.
+                response = create_json_errors(request.errors)
+                response['http_status'] = request.errors.status
+                return response
+            else:
+                return JSONError(request.errors, request.errors.status)
         response = _view(request)
         return response
 
     functools.wraps(wrapper)
     return wrapper
 
+def is_jsonp_request(request):
+    return get_jsonp_param_name() in request.GET
+
+
+def create_json_errors(errors):
+    errors = {
+        'status': 'error',
+        'errors': errors
+    }
+    return errors
+
 
 class JSONError(HTTPError):
 
     def __init__(self, errors, status=400):
-        body = {'status': 'error', 'errors': errors}
+        body = create_json_errors(errors)
         # HTTPError is derived from Response
         super(Response, self).__init__(json.dumps(body))
         self.status = status
