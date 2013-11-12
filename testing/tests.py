@@ -100,5 +100,6 @@ def test_suite():
         create_suite('../docs/sphinx.txt'),
         create_suite('../docs/jsonp.txt'),
         create_suite('../docs/help.txt'),
+        create_suite('../docs/accept_catch_all.txt')
     ))
     return s

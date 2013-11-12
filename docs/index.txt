@@ -30,6 +30,7 @@ Index
    sphinx.txt
    jsonp.txt
    help.txt
+   accept_catch_all.txt
 
 
 First Example
