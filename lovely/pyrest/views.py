@@ -62,6 +62,9 @@ def decorate_view(view, args):
         # check if there are errors and return an ErrorResponse if so
         if len(request.errors) > 0:
             if JSONP_SETTINGS['param_name'] in request.GET:
+                # if JSONP is requested return a HTTP 200 OK and create an
+                # error message. Pyramid wraps the message with given
+                # JSONP function name.
                 response = create_json_errors(request.errors)
                 response['http_status'] = request.errors.status
                 return response

@@ -2,7 +2,7 @@ from lovely.pyrest.service import Service
 """
 To show the different error handling in the following example,
 a request should have set the query parameter 'callback=your_callback' only.
-Therefore, the request does not fullfil all required parameters specificed by
+Therefore, the request does not fulfil all required parameters specificed by
 the schema below and a validation error occures.
 
 The response could then look similar as follows:
