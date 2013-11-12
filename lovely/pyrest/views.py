@@ -9,7 +9,8 @@ from lovely.pyrest.validation import validate_schema
 from lovely.pyrest.settings import (
     DEFAULT_VIEW_SETTINGS,
     DEFAULT_HELP_MESSAGE,
-    JSONP_SETTINGS
+    JSONP_SETTINGS,
+    get_jsonp_param_name
 )
 import json
 import functools
@@ -61,7 +62,7 @@ def decorate_view(view, args):
         # validaton fails.
         # check if there are errors and return an ErrorResponse if so
         if len(request.errors) > 0:
-            if JSONP_SETTINGS['param_name'] in request.GET:
+            if is_jsonp_request(request):
                 # if JSONP is requested return a HTTP 200 OK and create an
                 # error message. Pyramid wraps the message with given
                 # JSONP function name.
@@ -75,6 +76,9 @@ def decorate_view(view, args):
 
     functools.wraps(wrapper)
     return wrapper
+
+def is_jsonp_request(request):
+    return get_jsonp_param_name() in request.GET
 
 
 def create_json_errors(errors):
