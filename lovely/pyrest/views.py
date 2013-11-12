@@ -9,7 +9,6 @@ from lovely.pyrest.validation import validate_schema
 from lovely.pyrest.settings import (
     DEFAULT_VIEW_SETTINGS,
     DEFAULT_HELP_MESSAGE,
-    JSONP_SETTINGS,
     get_jsonp_param_name
 )
 import json

@@ -1,7 +1,6 @@
 from lovely.pyrest.predicates import ContentTypePredicate
 from lovely.pyrest.views import get_fallback_view, decorate_view
 from lovely.pyrest.settings import (
-    JSONP_SETTINGS,
     set_jsonp_param_name,
     get_jsonp_param_name
 )
