@@ -33,7 +33,6 @@ def no_catch_all(info, request):
     time.
     """
     try:
-        import pdb; pdb.set_trace()
         return request.accept.header_value != '*/*'
     except AttributeError:
         # assume that request didn't specify an 'accept' header
