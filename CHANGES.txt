@@ -5,6 +5,8 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+ - fixed documentation 'accept_catch_all'
+
 2013/11/13 0.1.5
 ================
 
