@@ -31,13 +31,14 @@ Perform a get on the first service.
 The first service does not take advantage of the 'accept_catch_all' parameter.
 Therefore, the result ::
 
-    >>> res = app.get('/service/1')
+    >>> headers = {'Accept': '*/*'}
+    >>> res = app.get('/service/1', headers=headers)
     >>> print res.status
     200 OK
 
     >>> print res.body
     {"test": "succeeded"}
 
-    >>> res = app.get('/service/2')
-    >>> print res.status
-    405 Method not Allowed
+    >>> app.get('/service/2', headers=headers)
+    Traceback (most recent call last):
+    PredicateMismatch: The resource could not be found.
