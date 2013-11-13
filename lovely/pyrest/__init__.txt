@@ -1,0 +1,101 @@
+==================
+__init__ Unit Tests
+==================
+
+accept_catch_all
+================
+
+Check the 'no_catch_all' function
+---------------------------------
+
+Initialize unit test::
+
+    >>> from lovely.pyrest import no_catch_all
+    >>> from pyramid.request import Request
+
+Create a (dummy) request which has set the 'accept' header to '*/*'::
+
+    >>> request = lambda: None
+    >>> request.accept = lambda: None
+    >>> setattr(request.accept, 'header_value', '*/*')
+    >>> result = no_catch_all(None, request)
+    >>> print result
+    False
+
+Create a request which has set the 'accept' header other than '*/*'::
+
+    >>> request.accept.header_value = 'application/json'
+    >>> result = no_catch_all(None, request)
+    >>> print result
+    True
+
+Try the exception case. This can occur if a request does not have set an
+'accept' header (in some cases 'request.accept' is a MIMENilAccept object)::
+
+    >>> request.accept = None
+    >>> result = no_catch_all(None, request)
+    >>> print result
+    False
+
+
+Check if the predicate is set
+-----------------------------
+
+Initialize the app and service::
+
+    >>> from pyramid.config import Configurator
+    >>> config = Configurator()
+
+Overwrite the `add_view` and `add_route` method, so it's possible to inspect
+the `views` and `routes`::
+
+    >>> views = []
+    >>> routes= []
+    >>> def add_view(view=None, route_name=None, **args):
+    ...     views.append((view, route_name, args))
+
+    >>> def add_route(name, path):
+    ...     routes.append((name, path))
+
+    >>> config.add_view = add_view
+    >>> config.add_route = add_route
+
+Include `lovely.pyrest` so the `add_service` method gets registered::
+
+    >>> config.include('lovely.pyrest')
+
+Create a service::
+
+    >>> from lovely.pyrest.service import Service
+    >>> service = Service('myService', '/service')
+    >>> @service.get()
+    ... def get(request):
+    ...     return 'hello get'
+
+    >>> @service.get(accept='application/json', accept_catch_all=False)
+    ... def get_json(request):
+    ...     return {'json': 'hello get json'}
+
+Add the service to the config::
+
+    >>> config.add_service(service)
+
+Three views get added for the `route`. One for each `HTTP-Method` and an
+additional `fallback_view` which handels errors if no predicate matches.
+The `get` view has only the `request_method` and `renderer` predicates which
+get added by default if it's not passed::
+
+    >>> pprint(views[1])
+    (<function wrapper at ...>,
+     'myService',
+     {'renderer': 'jsonp', 'request_method': 'GET'})
+
+The `get_json` view has the `request_method` predicate and the `predicates` which are defined in the view decorator::
+
+    >>> pprint(views[2])
+    (<function wrapper at ...>,
+     'myService',
+     {'accept': 'application/json',
+      'custom_predicates': [<function no_catch_all at ...>],
+      'renderer': 'jsonp',
+      'request_method': 'GET'})

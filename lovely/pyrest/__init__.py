@@ -2,7 +2,8 @@ from lovely.pyrest.predicates import ContentTypePredicate
 from lovely.pyrest.views import get_fallback_view, decorate_view
 from lovely.pyrest.settings import (
     set_jsonp_param_name,
-    get_jsonp_param_name
+    get_jsonp_param_name,
+    DEFAULT_VIEW_SETTINGS
 )
 from pyramid.events import NewRequest
 from errors import Errors
@@ -10,6 +11,33 @@ from pyramid.renderers import JSONP
 import copy
 
 __version__ = "0.1.4"
+
+
+def no_catch_all(info, request):
+    """
+    This predicate matches only if the 'accept' header is not set to */*.
+
+    In some cases you do have more than one view with the same HTTP method
+    per service.
+    If the client's request has set the accept header to '*/*' pyramid would
+    choose a view in a quite unpredictable way.
+    Example: two 'GET' views; one view accepts 'application/json', the other
+    accepts 'text/csv'.
+    If the client's request has set the accept header to '*/*' (or none for
+    that matter), pyramid could choose either one of the two views to handle
+    the request.
+
+    To be able to handle different mime-types we introduced 'accept_catch_all'
+    view parameter.
+    One can now specify a view to match 'text/csv' and not '*/*' at the same
+    time.
+    """
+    try:
+        return request.accept.header_value != '*/*'
+    except AttributeError:
+        # assume that request didn't specify an 'accept' header
+        # which is equal to '*/*'
+        return False
 
 
 def add_service(config, service):
@@ -22,9 +50,17 @@ def add_service(config, service):
     for method, view, args in service.definitions:
         args = copy.deepcopy(args)  # make a copy of the dict to not modify it
         args['request_method'] = method
+        # set the custom predicate 'accept_catch_all'
+        # by default, this is true
+        if args.get('accept_catch_all',
+                    DEFAULT_VIEW_SETTINGS['accept_catch_all']) == False:
+            predicates = args.get('custom_predicates', [])
+            predicates.append(no_catch_all)
+            args['custom_predicates'] = predicates
         decorated_view = decorate_view(view, dict(args))
         # remove args which are unknown by pyramid
-        for item in ('validators', 'schema', 'jsonp', 'help'):
+        for item in ('validators', 'schema', 'jsonp', 'help',
+                     'accept_catch_all'):
             if item in args:
                 del args[item]
         config.add_view(view=decorated_view, route_name=service.name, **args)

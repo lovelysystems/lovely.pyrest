@@ -1,0 +1,46 @@
+================
+accept_catch_all
+================
+
+In some cases you do have more than one view with the same HTTP method
+per service.
+If the client's request has set the accept header to '*/*' pyramid would
+choose a view in a quite unpredictable way.
+Example: two 'GET' views; one view accepts 'application/json', the other
+accepts 'text/csv'.
+If the client's request has set the accept header to '*/*' (or none for
+that matter), pyramid could choose either one of the two views to handle
+the request.
+
+To be able to handle different mime-types we introduced 'accept_catch_all'
+view parameter.
+One can now specify a view to match 'text/csv' and not '*/*' at the same
+time.
+
+The following example uses two services to demonstrate the functionality of the
+'accept_catch_all' parameter.
+
+Create a pyramid app which scans the module::
+
+    >>> from webtest import TestApp
+    >>> from pyramid import testing
+    >>> config = testing.setUp()
+    >>> config.include('lovely.pyrest')
+    >>> config.scan('lovely.pyrest.itests.accept_catch_all')
+    >>> app = TestApp(config.make_wsgi_app())
+
+Perform a get on the first service.
+The first service does not take advantage of the 'accept_catch_all' parameter.
+Therefore, the result ::
+
+    >>> headers = {'Accept': '*/*'}
+    >>> res = app.get('/service/1', headers=headers)
+    >>> print res.status
+    200 OK
+
+    >>> print res.body
+    {"test": "succeeded"}
+
+    >>> app.get('/service/2', headers=headers)
+    Traceback (most recent call last):
+    PredicateMismatch: The resource could not be found.

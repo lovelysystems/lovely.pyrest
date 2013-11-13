@@ -1,7 +1,8 @@
 
 DEFAULT_VIEW_SETTINGS = {
-    'renderer': 'jsonp',    # default views' renderer
-    'help': True            # enable 'help' by default
+    'renderer': 'jsonp',        # default views' renderer
+    'help': True,               # enable 'help' by default
+    'accept_catch_all': True    # set 'custom_predicate' to True by default
 }
 
 

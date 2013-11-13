@@ -1,0 +1,39 @@
+================
+accept_catch_all
+================
+
+In some cases you do have more than one view with the same HTTP method
+per service.
+If the client's request has set the accept header to '*/*' pyramid would
+choose a view in a quite unpredictable way.
+Example: two 'GET' views; one view accepts 'application/json', the other
+accepts 'text/csv'.
+If the client's request has set the accept header to '*/*' (or none for
+that matter), pyramid could choose either one of the two views to handle
+the request.
+
+To be able to handle different mime-types we introduced 'accept_catch_all'
+view parameter.
+One can now specify a view to match 'text/csv' and not '*/*' at the same
+time.
+
+We do this by adding a `Custom Route Predicate <http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/urldispatch.html?highlight=custom%20predicate#custom-route-predicates>`_ to the view which
+simply checks if the requests accept header is not equal to '*/*'.
+
+The following example defines a service and two views, both reachable by the
+same URL. If a client's request has set the accept header to
+'*/*' pyramid would use the 'get' view.
+If for some reason one wants to change this behaviour and use the 'get_json'
+view by default, one needs to set 'catch_accept_all' to 'False' to the other views' annotations.
+
+.. literalinclude:: examples/accept_catch_all.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.accept_catch_all')
+
+    >>> print app.get('/svc')
+    Response: 200 OK
+    Content-Type: application/json; charset=UTF-8
+    {"title": "Hello World!"}
