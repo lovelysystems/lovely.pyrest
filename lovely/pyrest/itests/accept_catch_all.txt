@@ -1,5 +1,7 @@
+================
 accept_catch_all
-----------------
+================
+
 In some cases you do have more than one view with the same HTTP method
 per service.
 If the client's request has set the accept header to '*/*' pyramid would
