@@ -10,7 +10,7 @@ from errors import Errors
 from pyramid.renderers import JSONP
 import copy
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 
 
 def no_catch_all(info, request):
