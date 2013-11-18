@@ -41,6 +41,30 @@ Therefore, the result ::
     >>> print res.body
     {"test": "succeeded"}
 
+Perform a get on the second service.
+The view of the second service has set the parameter 'accept_catch_all' to
+'False'.
+
     >>> app.get('/service/2', headers=headers)
     Traceback (most recent call last):
     PredicateMismatch: The resource could not be found.
+
+Perform a second get on the second service.
+This time, we set the accept header to a value which contains 'text/csv,*/*'.
+
+    >>> headers = {'Accept': 'text/csv,*/*'}
+    >>> print headers
+    {'Accept': 'text/csv,*/*'}
+    >>> res = app.get('/service/2', headers=headers)
+    Traceback (most recent call last):
+    PredicateMismatch: The resource could not be found.
+
+Again, with a different accept header::
+
+    >>> headers = {'Accept': '*/*,text/*'}
+    >>> print headers
+    {'Accept': '*/*,text/*'}
+    >>> res = app.get('/service/2', headers=headers)
+    Traceback (most recent call last):
+    PredicateMismatch: The resource could not be found.
+

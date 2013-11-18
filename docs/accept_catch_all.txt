@@ -37,3 +37,20 @@ view by default, one needs to set 'catch_accept_all' to 'False' to the other vie
     Response: 200 OK
     Content-Type: application/json; charset=UTF-8
     {"title": "Hello World!"}
+
+    # Set a different accept header which does not match the first 'svc.get'
+    # view.
+
+    >>> print app.get('/svc', headers={'Accept': 'text/*,*/*'})
+    Response: 200 OK
+    Content-Type: application/json; charset=UTF-8
+    {"title": "Hello World!"}
+
+    # Set a different accept header to match exactly the specified accept
+    # header of the first 'svc.get' view.
+
+    >>> print app.get('/svc', headers={'Accept': 'text/plain'})
+    Response: 200 OK
+    Content-Type: text/plain; charset=UTF-8
+    'title': 'Hello World!'
+

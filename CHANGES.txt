@@ -5,6 +5,9 @@ Changes for Lovey Pyrest
 unreleased
 ==========
 
+ - fixed 'accept_catch_all': does not check if accept header is equal to
+   '*/*' anymore but contains '*/*'.
+
  - fixed documentation 'accept_catch_all'
 
 2013/11/13 0.1.5

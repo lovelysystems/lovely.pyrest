@@ -33,7 +33,7 @@ def no_catch_all(info, request):
     time.
     """
     try:
-        return request.accept.header_value != '*/*'
+        return '*/*' not in request.accept.header_value
     except AttributeError:
         # assume that request didn't specify an 'accept' header
         # which is equal to '*/*'

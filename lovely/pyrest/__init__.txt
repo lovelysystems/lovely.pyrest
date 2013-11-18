@@ -29,6 +29,21 @@ Create a request which has set the 'accept' header other than '*/*'::
     >>> print result
     True
 
+Set the 'accept' header to a value which contains '*/*' and something
+different and check again.
+
+    >>> request.accept.header_value = 'application/json,*/*'
+    >>> result = no_catch_all(None, request)
+    >>> print result
+    False
+
+Change the ordering of the 'accept' headers:
+
+    >>> request.accept.header_value = '*/*,application/json'
+    >>> result = no_catch_all(None, request)
+    >>> print result
+    False
+
 Try the exception case. This can occur if a request does not have set an
 'accept' header (in some cases 'request.accept' is a MIMENilAccept object)::
 
