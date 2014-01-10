@@ -1,6 +1,6 @@
-==================================
-Creating API's by using decorators
-==================================
+===============================
+Creating API's using decorators
+============================
 
 This documentation is about how to create a REST like API Service by using the
 two decorators `RestService` and `rpcmethod`.
