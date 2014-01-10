@@ -13,8 +13,6 @@ Features
     - Sphinx extension to automatically generate documentation
     - It's possible to get help information of every endpoint
     - Schema-validation based on `jsonschema <http://json-schema.org/>`_
-    - returns correct error codes if request method is not supportet or `Accept`-
-      or `Content-Type`-Headers don't match
 
 Documentation
 =============
