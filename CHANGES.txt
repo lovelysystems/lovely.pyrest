@@ -2,4 +2,7 @@
 Changes for Lovey Pyrest
 ========================
 
+2014/01/10 2.0.0
+================
+
  - new version using decorator approach to define rest services
