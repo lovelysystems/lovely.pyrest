@@ -1,48 +1,52 @@
 import validictory
+import copy
 
 
-def number(s):
-    try:
-        return int(s)
-    except ValueError:
-        return float(s)
-
-CONVERSION = {
-    "integer": lambda s: int(s),
-    "number": number,
-    "boolean": lambda s: True if s.lower() == "true" else False,
-    "array": lambda s: s.split(","),
-}
+class ValidationException(Exception):
+    """A validation exception"""
 
 
-def validate_schema(request, schema):
-    # validate schema
-    query_schema = schema.get("query")
-    if query_schema is not None:
-        try:
-            # Because all GET-Parameters are strings try to convert them
-            # into the format specified in the schema
-            params = {}
-            for k in request.GET:
-                params[k] = request.GET[k]
-            for prop, o in query_schema.get('properties').iteritems():
-                stype = o.get('type')
-                if stype in CONVERSION:
-                    converter = CONVERSION[stype]
-                    v = params.get(prop)
-                    if v is not None:
-                        params[prop] = converter(v)
-            # for convenience remember the params_dict on the request
-            request.params_dict = params
-            validictory.validate(params, query_schema)
-        except ValueError, error:
-            request.errors.add('query',
-                               error.message)
-    body_schema = schema.get("body")
-    if body_schema is not None:
-        try:
-            json_body = request.json_body
-            validictory.validate(json_body, body_schema)
-        except ValueError, error:
-            request.errors.add('body',
-                               error.message)
+class Validator(validictory.SchemaValidator):
+    """Extend the validator
+    """
+
+    def validate_oneOf(self, x, fieldname, schema, props=None):
+        """Allows to provide multiple schemas for one property
+
+        If the validation fails the error from the last validation is raised.
+        """
+        data = x[fieldname]
+        error = None
+        for s in props:
+            try:
+                self.validate(data, s)
+                return
+            except validictory.FieldValidationError as e:
+                error = e
+        if error:
+            raise error
+
+
+def validate(schema):
+    """ A decorator to validate the kwargs of the decorated function against
+    the given schema. The schema has to be a valid validictory schema
+    """
+
+    def wrapper(f):
+        def validation_wrapper(*args, **kwargs):
+            try:
+                validictory.validate(kwargs, schema, Validator)
+            except ValueError, error:
+                raise ValidationException(error.message)
+            return f(*args, **kwargs)
+        return validation_wrapper
+    return wrapper
+
+
+def non_required(schema):
+    """ Helper function  to make all properties optional
+    """
+    s = copy.deepcopy(schema)
+    for v in s["properties"].values():
+        v['required'] = False
+    return s

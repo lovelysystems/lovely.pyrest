@@ -1,0 +1,114 @@
+========================
+Changes for Lovey Pyrest
+========================
+
+
+
+2013/11/18 0.1.6
+================
+
+ - fixed 'accept_catch_all': does not check if accept header is equal to
+   '*/*' anymore but contains '*/*'.
+
+ - fixed documentation 'accept_catch_all'
+
+2013/11/13 0.1.5
+================
+
+ - added 'accept_catch_all' view functionality.
+
+2013/11/12 0.1.4
+================
+
+ - New JSONP error handling. If an error occurs while processing a JSONP
+ request, the HTTP response will always be '200 OK'. The error message
+ can be processed in the JSONP callback.
+
+ - introduced new 'settings' module
+
+2013/11/11 0.1.3
+================
+
+ - added `services` option to sphinx directive to avoid duplicate rendering
+   of service docs
+
+2013/10/21 0.1.2
+================
+
+ - fixed wrong hyperlinks in documentation
+
+2013/10/21 0.1.1
+================
+
+ - removed development info from README and rephrased the introduction
+
+2013/10/21 0.1.0
+================
+
+ - added information how to publish documentation on gh-pages
+
+ - auto-doc: fixed bug where normal text gets included in <h4> tag
+
+ - removed closed source dependencies, so this package can be open sourced
+
+ - added license information
+
+2013/10/11 0.0.11
+=================
+
+ - bugfix: fixed query validation
+
+2013/10/11 0.0.10
+=================
+
+ - convert boolean for query parameter validation
+
+2013/10/11 0.0.9
+================
+
+ - changed schema validation for compatibility
+
+2013/10/11 0.0.8
+================
+
+ - number conversation for query parameters
+
+2013/10/09 0.0.7
+================
+
+ - Services provide help functionality by default
+
+2013/10/08 0.0.6
+================
+
+ - enabled JSONP support
+
+2013/10/08 0.0.5
+================
+
+ - added sphinx extension to generate service documentation automatically
+
+2013/10/04 0.0.4
+================
+
+ - possibility to use array type in GET query validation
+
+2013/10/02 0.0.3
+================
+
+ - added documentation
+
+2013/10/01 0.0.2
+================
+
+ - include DEFAULT_FORMAT_VALIDATORS from validictory
+
+2013/10/01 0.0.1
+================
+
+ - added basic functionallity:
+    * raise a 405 if an unimplemented method is called on a service
+    * provide schema validation
+    * raise correct errors if the `Accept` or `Content-Type` headers mismatch
+
+ - initial commit

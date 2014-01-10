@@ -3,6 +3,9 @@ import re
 import ConfigParser
 from setuptools import setup, find_packages
 
+import lovely.pyrest
+
+VERSION = lovely.pyrest.VERSION
 
 def get_versions():
     """picks the versions from version.cfg and returns them as dict"""
@@ -31,18 +34,11 @@ def nailed_requires(requirements, pat=re.compile(r'^(.+)(\[.+\])?$')):
 
 def read(path):
     return open(os.path.join(os.path.dirname(__file__), path)).read()
-versionf_content = open("lovely/pyrest/__init__.py").read()
-version_rex = r'^__version__ = [\'"]([^\'"]*)[\'"]$'
-m = re.search(version_rex, versionf_content, re.M)
-if m:
-    version = m.group(1)
-else:
-    raise RuntimeError('Unable to find version string')
 
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.rst')).read()
-CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
+readme = open(os.path.join(here, 'README.rst')).read()
+changes = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'gevent',
@@ -59,20 +55,20 @@ test_requires = requires + [
 ]
 
 setup(name='lovely.pyrest',
-      version=version,
-      description='REST Framework for pyramids',
-      long_description=README + '\n\n' + CHANGES,
+      version=VERSION,
+      description='rest framework for pyramids',
+      long_description=readme + '\n\n' + changes,
       classifiers=[
-          "Programming Language :: Python",
-          "Framework :: Pyramid",
-          "Topic :: Internet :: WWW/HTTP",
-          "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+          "programming language :: python",
+          "framework :: pyramid",
+          "topic :: internet :: www/http",
+          "topic :: internet :: www/http :: wsgi :: application",
       ],
-      author='Lovely Systems',
+      author='lovely systems',
       author_email='office@lovelysystems.com',
       url='https://github.com/lovelysystems/lovely.pyrest',
       keywords='pyramid rest framework',
-      license='Apache License 2.0',
+      license='apache license 2.0',
       packages=find_packages(),
       namespace_packages=['lovely'],
       include_package_data=True,

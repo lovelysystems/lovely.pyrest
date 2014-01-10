@@ -1,12 +1,19 @@
-from pprint import pprint
+from webtest import TestApp
+from pyramid import paster
 import unittest
 import doctest
+import os
+import pprint
+import requests
 import json
 import sys
-from pyramid.request import Request
-from lovely.pyrest.errors import Errors
-from docutils.core import publish_from_doctree, publish_doctree
 
+
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+here = os.path.dirname(__file__)
+
+#conf = os.path.join(here, 'testing', 'testing.ini')
+#app = paster.get_app(conf, 'main')
 
 def print_json(js):
     try:
@@ -17,27 +24,12 @@ def print_json(js):
     print(json.dumps(d, indent=4, sort_keys=True))
 
 
-def render_doc_node(node, writer_name='pseudoxml'):
-    """ Renderers a docutils node """
-    # Create an empty document
-    doc = publish_doctree("")
-    # append the node
-    doc.children.append(node)
-    # publish the document and return the output
-    return publish_from_doctree(doc, writer_name=writer_name)
-
-
-def create_request():
-    request = Request({})
-    request.errors = Errors()
-    return request
-
-
 def setUp(test):
-    test.globs['pprint'] = pprint
-    test.globs['create_request'] = create_request
+#    testapp = TestApp(app)
+#    test.globs['browser'] = testapp
     test.globs['print_json'] = print_json
-    test.globs['render_doc_node'] = render_doc_node
+    test.globs['pprint'] = pprint.pprint
+#    test.globs['registry'] = testapp.app.registry
 
 
 def tearDown(test):
@@ -58,16 +50,7 @@ def create_suite(testfile, layer=None, level=None,
 
 def test_suite():
     s = unittest.TestSuite((
-        create_suite('service.txt'),
-        create_suite('validation.txt'),
-        create_suite('predicates.txt'),
-        create_suite('views.txt'),
-        create_suite('rest.txt'),
-        create_suite('__init__.txt'),
-        create_suite('itests/service_definition.txt'),
-        create_suite('itests/accept_catch_all.txt'),
-        create_suite('sphinx/schema.txt'),
-        create_suite('sphinx/validators.txt'),
-        create_suite('sphinx/service.txt'),
+        create_suite('rest.rst'),
+        create_suite('validation.rst'),
     ))
     return s

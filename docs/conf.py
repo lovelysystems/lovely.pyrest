@@ -1,5 +1,6 @@
 import os
 import re
+from lovely.pyrest import VERSION
 
 # inject the VERSION constant used below
 # This can be used because the build script updates the version number before
@@ -8,13 +9,6 @@ import re
 
 def read(path):
     return open(os.path.join(os.path.dirname(__file__), path)).read()
-versionf_content = open("../lovely/pyrest/__init__.py").read()
-version_rex = r'^__version__ = [\'"]([^\'"]*)[\'"]$'
-m = re.search(version_rex, versionf_content, re.M)
-if m:
-    docs_version = m.group(1)
-else:
-    raise RuntimeError('Unable to find version string')
 
 # The suffix of source filenames.
 source_suffix = '.txt'
@@ -34,7 +28,7 @@ extensions = ['sphinx.ext.doctest']
 project = u'lovely.pyrest'
 copyright = u'2013, Lovely Systems GmbH'
 
-version = release = docs_version
+version = release = VERSION
 exclude_patterns = ['lovely.pyrest.egg-info', 'parts', 'checkouts']
 
 html_theme = 'pyramid'
