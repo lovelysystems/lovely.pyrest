@@ -3,6 +3,7 @@ from docutils.parsers.rst import Directive
 from lovely.pyrest.rest import get_services
 from importlib import import_module
 from lovely.pyrest.sphinx.helpers import create_node, trim
+from pyramid import paster
 from pyramid.config import Configurator
 import json
 import venusian
@@ -18,24 +19,30 @@ class ServiceDirective(Directive):
     """ The Service directive renders all services defined in a module """
 
     has_content = True
-    required_arguments = 1
+    required_arguments = 0
 
     option_spec = {'services': convert_to_list}
 
     def run(self):
-        # instantiate a pyramid configurator
-        config = Configurator()
-        module_str = self.arguments[0]
-        # import the module
-        module = import_module(module_str)
-        # check if the module has an `includeme` method and call it
-        # because the base route must be added
-        if hasattr(module, 'includeme'):
-            module.includeme(config)
-        config.commit()
-        # scan the module for services
-        scanner = venusian.Scanner(config=config)
-        scanner.scan(module)
+        # Check if the pyramid config file is set, if souse paster to manage
+        # imports
+        conf_file = self.pyramid_conf()
+        if conf_file:
+            paster.get_app(conf_file)
+        else:
+            # instantiate a pyramid configurator
+            config = Configurator()
+            module_str = self.arguments[0]
+            # import the module
+            module = import_module(module_str)
+            # check if the module has an `includeme` method and call it
+            # because the base route must be added
+            if hasattr(module, 'includeme'):
+                module.includeme(config)
+            config.commit()
+            # scan the module for services
+            scanner = venusian.Scanner(config=config)
+            scanner.scan(module)
         rendered = []
         # fetch all services
         services = get_services()
@@ -54,6 +61,10 @@ class ServiceDirective(Directive):
         """
         settings = self.state.document.settings
         return settings.env.new_serialno(ident)
+
+    def pyramid_conf(self):
+        conf = self.state.document.settings.env.config
+        return conf['pyramid_conf']
 
     @staticmethod
     def render(service, service_id):

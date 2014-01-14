@@ -2,6 +2,10 @@
 Changes for Lovey Pyrest
 ========================
 
+ - added sphinx option for pyramid_config path. With this option set
+   url prefixes are rendered correctly and it's not necessary to specify
+   a module in service directive
+
 2014/01/14 2.0.2
 ================
 

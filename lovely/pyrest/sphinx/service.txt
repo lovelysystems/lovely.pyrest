@@ -71,9 +71,13 @@ The `ServiceDirective` renders a service documentation including:
 
 Patch the serialno function, because there are no settings in test environment::
 
-    >>> def serialno_patch(self):
+    >>> def serialno_patch(ident):
     ...     return 0
     >>> directive.serialno = serialno_patch
+
+    >>> def pyramid_conf():
+    ...     return None
+    >>> directive.pyramid_conf = pyramid_conf
 
 Render the documentation::
 
