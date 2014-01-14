@@ -2,6 +2,9 @@
 Changes for Lovey Pyrest
 ========================
 
+2014/01/14 2.0.4
+================
+
  - updated documentation for sphinx directive
 
  - fixed optional positional arguments in sphinx directive
