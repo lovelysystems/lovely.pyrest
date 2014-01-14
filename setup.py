@@ -3,9 +3,16 @@ import re
 import ConfigParser
 from setuptools import setup, find_packages
 
-import lovely.pyrest
+#import lovely.pyrest
 
-VERSION = lovely.pyrest.VERSION
+versionf_content = open("lovely/pyrest/__init__.py").read()
+version_rex = r'^__version__ = [\'"]([^\'"]*)[\'"]$'
+m = re.search(version_rex, versionf_content, re.M)
+if m:
+    version = m.group(1)
+else:
+    raise RuntimeError('Unable to find version string')
+
 
 def get_versions():
     """picks the versions from version.cfg and returns them as dict"""
@@ -55,7 +62,7 @@ test_requires = requires + [
 ]
 
 setup(name='lovely.pyrest',
-      version=VERSION,
+      version=version,
       description='rest framework for pyramids',
       long_description=readme + '\n\n' + changes,
       classifiers=[
