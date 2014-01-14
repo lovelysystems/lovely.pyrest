@@ -2,6 +2,9 @@
 Changes for Lovey Pyrest
 ========================
 
+2014/01/14 2.0.1
+================
+
  - updated documentation generation for lovely.pyrest 2.0
 
 2014/01/10 2.0.0
