@@ -26,6 +26,34 @@ Index
    service.txt
    validation.txt
    sphinx.txt
-   help.txt
 
+First Example
+=============
 
+This is an example of a full WSGI application using `lovely.pyrest`:
+
+.. literalinclude:: examples/first_example.py
+
+.. doctest::
+    :hide:
+
+    >>> app = get_app('testing.examples.first_example')
+
+The example provides the following functionallity:
+
+Schema Validation
+-----------------
+
+The request body gets validated if a post request gets performed and a json
+error message gets returned if validation fails::
+
+    >>> res = app.post_json('/article', {'content': 'This is my...'}, expect_errors=True)
+
+    >>> print res.status
+    400 Bad Request
+
+    >>> print_json(res.body)
+    {
+        "reason": "Required field 'title' is missing",
+        "status": "ERROR"
+    }
