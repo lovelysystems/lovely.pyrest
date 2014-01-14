@@ -2,6 +2,8 @@
 Changes for Lovey Pyrest
 ========================
 
+ - moved content of testing/tests.py to lovely/pyrest/tests.py
+
 2014/01/14 2.0.4
 ================
 

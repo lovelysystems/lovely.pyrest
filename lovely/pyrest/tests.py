@@ -1,20 +1,62 @@
-from webtest import TestApp
-from pyramid import paster
+from __future__ import absolute_import
 from docutils.core import publish_from_doctree, publish_doctree
+from contextlib import contextmanager
+from lovely.pyrest.rest import SERVICES
 import unittest
 import doctest
 import os
 import pprint
-import requests
 import json
 import sys
+import tempfile
+import shutil
+import sphinx.cmdline
 
 
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 here = os.path.dirname(__file__)
 
-#conf = os.path.join(here, 'testing', 'testing.ini')
-#app = paster.get_app(conf, 'main')
+
+DOC_CONF = """
+extensions = ['lovely.pyrest.sphinx']
+source_suffix = '.txt'
+master_doc = 'index'
+html_theme = 'pyramid'
+"""
+
+
+@contextmanager
+def _temp_dir():
+    tmp = tempfile.mkdtemp()
+    yield tmp
+    shutil.rmtree(tmp)
+
+
+def render_doc(rst_path):
+    """ Renders a restructured Text file and returns the
+        html output """
+
+    # Remove all existing services
+    SERVICES.clear()
+    with _temp_dir() as tmp:
+        out_dir = os.path.join(tmp, 'out')
+        in_dir = os.path.join(tmp, 'in')
+        os.mkdir(in_dir)
+        # write the rst string to a file
+        conf = DOC_CONF % dict(
+            rst_file=rst_path
+        )
+        shutil.copyfile(rst_path, os.path.join(in_dir, 'index.txt'))
+        conf_path = os.path.join(in_dir, 'conf.py')
+        with file(conf_path, 'wb') as cf:
+            cf.write(conf)
+        sphinx_argv = ['sphinx-build', '-b', 'html',
+                       in_dir, out_dir]
+        sphinx.cmdline.main(sphinx_argv)
+        index_path = os.path.join(out_dir, 'index.html')
+        with open(index_path, 'r') as index:
+            return index.read()
+
 
 def print_json(js):
     try:
@@ -23,6 +65,7 @@ def print_json(js):
         print >> sys.stderr, js
         raise
     print(json.dumps(d, indent=4, sort_keys=True))
+
 
 def render_doc_node(node, writer_name='pseudoxml'):
     """ Renderers a docutils node """
@@ -35,12 +78,10 @@ def render_doc_node(node, writer_name='pseudoxml'):
 
 
 def setUp(test):
-#    testapp = TestApp(app)
-#    test.globs['browser'] = testapp
     test.globs['print_json'] = print_json
     test.globs['pprint'] = pprint.pprint
     test.globs['render_doc_node'] = render_doc_node
-#    test.globs['registry'] = testapp.app.registry
+    test.globs['render_doc'] = render_doc
 
 
 def tearDown(test):
@@ -64,5 +105,6 @@ def test_suite():
         create_suite('rest.rst'),
         create_suite('validation.rst'),
         create_suite('sphinx/service.txt'),
+        create_suite('../../docs/sphinx.txt'),
     ))
     return s
