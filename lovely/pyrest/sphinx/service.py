@@ -20,6 +20,7 @@ class ServiceDirective(Directive):
 
     has_content = True
     required_arguments = 0
+    optional_arguments = 1
 
     option_spec = {'services': convert_to_list}
 
