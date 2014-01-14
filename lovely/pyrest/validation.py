@@ -39,6 +39,9 @@ def validate(schema):
             except ValueError, error:
                 raise ValidationException(error.message)
             return f(*args, **kwargs)
+        # link doc with function docstring, so it's accessible for generating
+        # documentation
+        validation_wrapper.__doc__ = f.__doc__
         return validation_wrapper
     return wrapper
 

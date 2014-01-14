@@ -4,79 +4,122 @@ Service Directive Unit Test
 
 Create a service::
 
-    >>> from lovely.pyrest.service import Service
-    >>> def validator(request):
-    ...     """ Validates something"""
+    >>> from lovely.pyrest.rest import RestService, rpcmethod_route
+    >>> from lovely.pyrest.validation import validate
     >>> schema = {
-    ...     "query": {
-    ...         "type": "object",
-    ...         "properties": {
-    ...             "u": {
-    ...                 "type": "string",
-    ...             }
-    ...         }
-    ...     },
-    ...     "body": {
-    ...         "type": "object"
-    ...     }
+    ...    "type": "object",
+    ...    "properties": {
+    ...        "u": {
+    ...            "type": "string",
+    ...        }
+    ...    }
     ... }
-    >>> service = Service('service', '/service',
-    ...                   description='My Service')
-    >>> @service.get(schema=schema, validators=[validator],
-    ...              accept='application/json', content_type='application/json')
-    ... def get(request):
-    ...     return {'success': True}
+    >>> class HelloService(object):
+    ...     """ Description of the Service """
+    ...     
+    ...     @rpcmethod_route(request_method='POST',
+    ...                      content_type='application/json')
+    ...     @validate(schema)
+    ...     def sample(self, data):
+    ...         """ Updates a sample """
+    ...
+    ...     @rpcmethod_route(accept='application/json', route_suffix='/{id}')
+    ...     def get(self, id, data):
+    ...         pass
+
+    >>> class stubmodule:
+    ...     __name__ = "stubmodule"
+    ...     __path__ = "stubmodule"
+    ...     Service = HelloService
+    ...
+    ...     @staticmethod
+    ...     def includeme(config):
+    ...         config.add_route('base', '/base', static=True)
+
+    >>> import sys
+    >>> sys.modules['stubmodule'] = stubmodule
+
+    >>> frame = sys._getframe(0)
+    >>> frame.f_globals['__name__'] = 'stubmodule'
+    >>> frame.f_locals['__module__'] = 'stubmodule'
+
+    >>> from lovely.pyrest.rest import RestService
+    >>> _ = RestService('base')(HelloService)
+
+    >>> from pyramid.urldispatch import Route
+    >>> class RouteMapper():
+    ...     route = Route('base', '/base')
+    ...     def get_route(self, name):
+    ...         return self.route
+
+
+    >>> def with_package(self, module):
+    ...     return self
+
+    >>> from pyramid.config import Configurator
+    >>> Configurator.with_package = with_package
 
 The `ServiceDirective` renders a service documentation including:
 
     - Description
     - Content-Type header
     - Accept header
-    - Validators
     - Schema
 
     >>> from lovely.pyrest.sphinx.service import ServiceDirective
-    >>> out = ServiceDirective.render(service, 'unique_id')
-    >>> print render_doc_node(out)
+    >>> directive = ServiceDirective('service', ["stubmodule"], {}, None, None, None, None, None, None)
+
+Patch the serialno function, because there are no settings in test environment::
+
+    >>> def serialno_patch(self):
+    ...     return 0
+    >>> directive.serialno = serialno_patch
+
+Render the documentation::
+
+    >>> out = directive.run()
+    >>> print render_doc_node(out[0])
     <document source="<string>">
-        <section ids="unique_id">
+        <section ids="service_0">
             <title>
-                service service - /service
+                base service
             <paragraph>
-                My Service
-            <section ids="unique_id_GET">
+                Description of the Service
+            <section ids="service_0_GET">
                 <title>
-                    GET
+                    GET - /base/{id}
                 <paragraph>
                     Accept: application/json
+            <section ids="service_0_POST">
+                <title>
+                    POST - /base
                 <paragraph>
-                    Content-Types: application/json
-                <section ids="unique_id_GET_schema">
+                    Updates a sample
+                <paragraph>
+                    Content-Type: application/json
+                <section ids="service_0_POST_validator">
                     <title>
-                        GET-Parameters:
-                    <list_item>
-                        <inline>
-                            u: required, string
-                    <title>
-                        JSON Body:
+                        Data Schema:
                     <line_block>
                         <line>
                             {
                         <line_block>
                             <line>
-                                "type": "object"
+                                "type": "object",
+                            <line>
+                                "properties": {
+                            <line_block>
+                                <line>
+                                    "u": {
+                                <line_block>
+                                    <line>
+                                        "type": "string"
+                                <line>
+                                    }
+                            <line>
+                                }
                         <line>
                             }
-                <section ids="service_unique_id_GET_validators">
-                    <title>
-                        Validation:
-                    <paragraph>
-                        Validates something
-
-.. note::
-
-    Rendering of `Validators` and `Schema` is provided by the `SchemaDirective`
-    and `ValidatorsDirective`. Those Directives are tested separately.
 
 Convert to List
 ===============
