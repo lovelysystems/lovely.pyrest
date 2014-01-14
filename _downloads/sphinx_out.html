@@ -54,20 +54,19 @@
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="service_0">
-<h3>article service - /article/{id}<a class="headerlink" href="#service_0" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="service_0_GET">
-<h4>GET<a class="headerlink" href="#service_0_GET" title="Permalink to this headline">¶</a></h4>
-<p>Accept: application/json</p>
-<div class="section" id="service_service_0_GET_validators">
-<h5>Validation:<a class="headerlink" href="#service_service_0_GET_validators" title="Permalink to this headline">¶</a></h5>
-<p>Validates that the article exists</p>
-</div>
-</div>
+<h3>article service<a class="headerlink" href="#service_0" title="Permalink to this headline">¶</a></h3>
+<p>Create and read articles</p>
 <div class="section" id="service_0_POST">
-<h4>POST<a class="headerlink" href="#service_0_POST" title="Permalink to this headline">¶</a></h4>
-<p>Content-Types: application/json</p>
-<div class="section" id="service_0_POST_schema">
-<h5>JSON Body:<a class="headerlink" href="#service_0_POST_schema" title="Permalink to this headline">¶</a></h5>
+<h4>POST - /article<a class="headerlink" href="#service_0_POST" title="Permalink to this headline">¶</a></h4>
+<p>Update article</p>
+<p>Content-Type: application/json</p>
+</div>
+<div class="section" id="service_0_GET">
+<h4>GET - /article<a class="headerlink" href="#service_0_GET" title="Permalink to this headline">¶</a></h4>
+<p>Returns the article</p>
+<p>Accept: application/json</p>
+<div class="section" id="service_0_GET_validator">
+<h5>Data Schema:<a class="headerlink" href="#service_0_GET_validator" title="Permalink to this headline">¶</a></h5>
 <div class="line-block">
 <div class="line">{</div>
 <div class="line-block">
@@ -100,13 +99,10 @@
   <ul>
 <li><a class="reference internal" href="#">Articles</a><ul>
 <li><a class="reference internal" href="#description">Description</a><ul>
-<li><a class="reference internal" href="#service_0">article service - /article/{id}</a><ul>
-<li><a class="reference internal" href="#service_0_GET">GET</a><ul>
-<li><a class="reference internal" href="#service_service_0_GET_validators">Validation:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#service_0_POST">POST</a><ul>
-<li><a class="reference internal" href="#service_0_POST_schema">JSON Body:</a></li>
+<li><a class="reference internal" href="#service_0">article service</a><ul>
+<li><a class="reference internal" href="#service_0_POST">POST - /article</a></li>
+<li><a class="reference internal" href="#service_0_GET">GET - /article</a><ul>
+<li><a class="reference internal" href="#service_0_GET_validator">Data Schema:</a></li>
 </ul>
 </li>
 </ul>

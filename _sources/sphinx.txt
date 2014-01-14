@@ -9,8 +9,7 @@ The generated documentation contains:
     - HTTP-Method overview
     - Accept Header
     - Content-Type Header
-    - Validators
-    - GET-Parameters and JSON Body
+    - Schema
 
 Include the extension
 =====================
@@ -24,10 +23,14 @@ If you have other extensions use::
 
     extensions.append('lovely.pyrest.sphinx')
 
+If you don't want to specify the module when using the sphinx directive add::
+
+   pyramid_conf = <path-to-app-conf> 
+
 Example
 =======
 
-Assume you have a Service with validators and a Schema:
+Assume you have a Service with a Schema:
 
 .. literalinclude:: examples/sphinx.py
 
@@ -53,6 +56,7 @@ in your rst file like in this:
 
     Check that the included html file equals the output:
 
+
     >>> with open(os.path.join(examples, 'sphinx_out.html')) as f:
     ...     f.read() == out
     True
@@ -71,28 +75,20 @@ The Service directive renders all services defined in a module.
 This modulde must be provided as argument::
 
     .. service:: myapp.service
-    
-Schema Directive
-----------------
 
-The Schema directive inserts only the information about GET-Parameter and JSON-Body
-of a specific service. The Service Directive also provides this information.
-This directive needs three arguments::
+If the `pyramid_conf` option is set in the sphinx config file (conf.py) it's
+possible to ommit the module::
 
-    .. schema::
-        myapp.articles  # The module which contains the service
-        article         # The service
-        GET             # The HTTP method
+    .. service::
 
+It's also possible to specify base url of the service if you don't want to render
+all services::
 
-Validators Directive
---------------------
+    .. service::
+        :services: article
 
-Like the Schema Directive the Validatiors directive provides only information
-about validation. This information is also included in the Service Directive.
-This Directive has the same arguments as the Schema Directive::
+Or::
 
-    .. validators::
-        myapp.articles  # The module which contains the service
-        article         # The service
-        GET             # The HTTP method
+    .. service::
+        myapp.service
+        :services: article

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Lovely PyRest Documentation &mdash; lovely.pyrest 0.1.1 documentation</title>
+    <title>Lovely PyRest Documentation &mdash; lovely.pyrest 2.0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1.1',
+        VERSION:     '2.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="lovely.pyrest 0.1.1 documentation" href="#" />
+    <link rel="top" title="lovely.pyrest 2.0.5 documentation" href="#" />
     <link rel="next" title="Setup a Project using Lovely PyRest" href="setup.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -41,7 +41,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              accesskey="N">next</a></li>
-        <li><a href="#">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="#">lovely.pyrest 2.0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,8 +54,8 @@
 <h1>Lovely PyRest Documentation<a class="headerlink" href="#lovely-pyrest-documentation" title="Permalink to this headline">¶</a></h1>
 <p>Lovely Pyrest is an extension for
 <a class="reference external" href="http://www.pylonsproject.org/projects/pyramid/about">Pyramid</a> to easily create
-REST-Services. It provides functionallity to define service endpoints with the
-following features:</p>
+REST-Services. It provides functionallity to define service endpoints by
+decorating classes and methods.</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <blockquote>
@@ -63,8 +63,6 @@ following features:</p>
 <li>Sphinx extension to automatically generate documentation</li>
 <li>It&#8217;s possible to get help information of every endpoint</li>
 <li>Automatic schema-validation based on <a class="reference external" href="http://json-schema.org/">jsonschema</a></li>
-<li>returns correct error codes if request method is not supportet or <cite>Accept</cite>-
-or <cite>Content-Type</cite>-Headers dont&#8217;t match</li>
 </ul>
 </div></blockquote>
 </div>
@@ -75,127 +73,81 @@ or <cite>Content-Type</cite>-Headers dont&#8217;t match</li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup a Project using Lovely PyRest</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="service.html">Creating Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">Example Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html#step-by-step">Step by step</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sphinx.html">Generate Documentation</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="jsonp.html">JSONP Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
 </ul>
 </div>
 </div>
 <div class="section" id="first-example">
 <h2>First Example<a class="headerlink" href="#first-example" title="Permalink to this headline">¶</a></h2>
 <p>This is an example of a full WSGI application using <cite>lovely.pyrest</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.rest</span> <span class="kn">import</span> <span class="n">RestService</span><span class="p">,</span> <span class="n">rpcmethod_route</span>
+<span class="kn">from</span> <span class="nn">lovely.pyrest.validation</span> <span class="kn">import</span> <span class="n">validate</span>
 
-<span class="n">articles</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;article&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/article/{id}&#39;</span><span class="p">)</span>
 
 <span class="n">ARTICLES</span> <span class="o">=</span> <span class="p">{}</span>
 
 
-<span class="k">def</span> <span class="nf">article_exists</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A Validator the verify that the article exists &quot;&quot;&quot;</span>
-    <span class="n">_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">matchdict</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ARTICLES</span><span class="p">:</span>
-        <span class="n">desc</span> <span class="o">=</span> <span class="s">&quot;Article with id </span><span class="si">%s</span><span class="s"> does not exist&quot;</span> <span class="o">%</span> <span class="n">_id</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;uri&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>  <span class="c"># Add an error if validation fails</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="mi">404</span>  <span class="c"># Set the error status code</span>
-
-
-<span class="nd">@articles.get</span><span class="p">(</span><span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">article_exists</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Returns an article &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">ARTICLES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">matchdict</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">])</span>
-
-
 <span class="c"># Create a schema to validate the body</span>
 <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;body&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
-        <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span>
-            <span class="p">},</span>
-            <span class="s">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span><span class="p">,</span>
-                <span class="s">&quot;required&quot;</span><span class="p">:</span> <span class="bp">False</span>
-            <span class="p">},</span>
-        <span class="p">}</span>
+    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s">&quot;required&quot;</span><span class="p">:</span> <span class="bp">False</span>
+        <span class="p">},</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 
-<span class="nd">@articles.post</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Save an article &quot;&quot;&quot;</span>
-    <span class="n">_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">matchdict</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;stored&#39;</span><span class="p">:</span> <span class="n">_id</span><span class="p">}</span>
+<span class="nd">@RestService</span><span class="p">(</span><span class="s">&#39;article&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create and read articles &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">)</span>
+    <span class="nd">@validate</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ARTICLES</span><span class="p">)</span>
+        <span class="n">ARTICLES</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;stored&#39;</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
+
+    <span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">route_suffix</span><span class="o">=</span><span class="s">&#39;/{id}&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ARTICLES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">includeme</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;article&#39;</span><span class="p">,</span> <span class="s">&#39;/article&#39;</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The example provides the following functionallity:</p>
-<div class="section" id="error-responses">
-<h3>Error responses<a class="headerlink" href="#error-responses" title="Permalink to this headline">¶</a></h3>
-<p>Automatically raises a 405 if any method, except POST and GET is used on <cite>/article/{id}</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;/article/1&#39;</span><span class="p">,</span> <span class="n">expect_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span>
-<span class="go">405 Method Not Allowed</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">print_json</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-<span class="go">{</span>
-<span class="go">    &quot;errors&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;The method DELETE is not allowed for this resource&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;method&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ],</span>
-<span class="go">    &quot;status&quot;: &quot;error&quot;</span>
-<span class="go">}</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="schema-validation">
 <h3>Schema Validation<a class="headerlink" href="#schema-validation" title="Permalink to this headline">¶</a></h3>
 <p>The request body gets validated if a post request gets performed and a json
 error message gets returned if validation fails:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">post_json</span><span class="p">(</span><span class="s">&#39;/article/1&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;content&#39;</span><span class="p">:</span> <span class="s">&#39;This is my...&#39;</span><span class="p">},</span> <span class="n">expect_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">post_json</span><span class="p">(</span><span class="s">&#39;/article&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;content&#39;</span><span class="p">:</span> <span class="s">&#39;This is my...&#39;</span><span class="p">},</span> <span class="n">expect_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span>
 <span class="go">400 Bad Request</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_json</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
 <span class="go">{</span>
-<span class="go">    &quot;errors&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;Required field &#39;title&#39; is missing&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;body&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ],</span>
-<span class="go">    &quot;status&quot;: &quot;error&quot;</span>
-<span class="go">}</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="custom-validator">
-<h3>Custom Validator<a class="headerlink" href="#custom-validator" title="Permalink to this headline">¶</a></h3>
-<p>The <cite>get</cite> method uses a custom validator to check if the given article exists.
-If the validation fails also a json error response gets returned:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/article/1&#39;</span><span class="p">,</span> <span class="n">expect_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span>
-<span class="go">404 Not Found</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">print_json</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-<span class="go">{</span>
-<span class="go">    &quot;errors&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;Article with id 1 does not exist&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;uri&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ],</span>
-<span class="go">    &quot;status&quot;: &quot;error&quot;</span>
+<span class="go">    &quot;reason&quot;: &quot;Required field &#39;title&#39; is missing&quot;,</span>
+<span class="go">    &quot;status&quot;: &quot;ERROR&quot;</span>
 <span class="go">}</span>
 </pre></div>
 </div>
@@ -217,9 +169,7 @@ If the validation fails also a json error response gets returned:</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#first-example">First Example</a><ul>
-<li><a class="reference internal" href="#error-responses">Error responses</a></li>
 <li><a class="reference internal" href="#schema-validation">Schema Validation</a></li>
-<li><a class="reference internal" href="#custom-validator">Custom Validator</a></li>
 </ul>
 </li>
 </ul>
@@ -252,7 +202,7 @@ If the validation fails also a json error response gets returned:</p>
         <li class="right" style="margin-right: 10px">
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              >next</a></li>
-        <li><a href="#">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="#">lovely.pyrest 2.0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

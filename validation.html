@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Validation &mdash; lovely.pyrest 0.1.1 documentation</title>
+    <title>Validation &mdash; lovely.pyrest 2.0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1.1',
+        VERSION:     '2.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="lovely.pyrest 0.1.1 documentation" href="index.html" />
+    <link rel="top" title="lovely.pyrest 2.0.5 documentation" href="index.html" />
     <link rel="next" title="Generate Documentation" href="sphinx.html" />
-    <link rel="prev" title="Creating Services" href="service.html" />
+    <link rel="prev" title="Example Service" href="service.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -43,9 +43,9 @@
           <a href="sphinx.html" title="Generate Documentation"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="service.html" title="Creating Services"
+          <a href="service.html" title="Example Service"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">lovely.pyrest 2.0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,158 +56,44 @@
             
   <div class="section" id="validation">
 <h1>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h1>
-<p>Lovely PyRest provides two ways of validation. On the one hand you can use
-schema validation using <a class="reference external" href="https://github.com/sunlightlabs/validictory">Validictory</a>. On the other hand you can implement
-custom validators as functions to be more flexible.
-Both ways can be combined.</p>
-<div class="section" id="schema-validation">
-<h2>Schema Validation<a class="headerlink" href="#schema-validation" title="Permalink to this headline">¶</a></h2>
-<p>This is an example how to validate the <cite>query</cite>-Parameter and the request body:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
-
-<span class="n">article</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;article&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/article&#39;</span><span class="p">)</span>
-
-<span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;body&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
-        <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="s">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
-        <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span>
-            <span class="p">},</span>
-            <span class="s">&quot;categories&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;array&quot;</span><span class="p">,</span>
-                <span class="s">&quot;required&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;news&quot;</span><span class="p">,</span> <span class="s">&quot;sports&quot;</span><span class="p">,</span> <span class="s">&quot;politics&quot;</span><span class="p">]</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-
-<span class="nd">@article.post</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Save an article &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;stored&#39;</span><span class="p">:</span> <span class="s">&#39;ok&#39;</span><span class="p">}</span>
-
-
-<span class="nd">@article.get</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Save an article &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;stored&#39;</span><span class="p">:</span> <span class="s">&#39;ok&#39;</span><span class="p">}</span>
+<p>This documentation is about validating keyword arguments passed to functions or
+methods. The validation is done by a decorator with using a given schema. The
+actual validation is done by <a class="reference external" href="https://github.com/sunlightlabs/validictory">validictory</a>.
+For details about the schema definitions see <a class="reference external" href="http://json-schema.org/latest/json-schema-validation.html">json-schema-validation</a></p>
+<div class="section" id="the-validate-decorator">
+<h2>The <cite>validate</cite> decorator<a class="headerlink" href="#the-validate-decorator" title="Permalink to this headline">¶</a></h2>
+<p>The decorator <cite>validate</cite> requires a schema passed to the decorator. Let&#8217;s
+define a schema for keyword arguments like data={&#8220;a&#8221;:&#8221;foo&#8221;, &#8220;b&#8221;:42}:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>                <span class="s">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;string&quot;</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="s">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;integer&quot;</span><span class="p">},</span>
+<span class="gp">... </span>            <span class="p">}</span>
+<span class="gp">... </span>        <span class="p">}</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Performing a POST request without any body or GET-Parameter fails and a json
-error gets returned:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/article&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span>
-<span class="go">400 Bad Request</span>
+<p>Now implement a function to decorate with the required signature:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lovely.pyrest.validation</span> <span class="kn">import</span> <span class="n">validate</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">print_json</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-<span class="go">{</span>
-<span class="go">    &quot;errors&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;Required field &#39;id&#39; is missing&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;query&quot;</span>
-<span class="go">        },</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;No JSON object could be decoded&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;body&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ],</span>
-<span class="go">    &quot;status&quot;: &quot;error&quot;</span>
-<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@validate</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
 </pre></div>
 </div>
-<p>For validation the <cite>query</cite> and <cite>body</cite> properties are used as seperate schemas.
-The <cite>query</cite> schema is used for validating the GET-Parameter and the <cite>body</cite>
-schema is used for validating the request body.
-It&#8217;s not necessary to define both of them.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you define a <cite>query</cite> schema it&#8217;s important that the type is <cite>object</cite>,
-because the GET-Parameter will be converted to a dictionary before they
-get validated.
-For the <cite>body</cite> schema it&#8217;s ok to use <cite>array</cite>.</p>
-</div>
-<p>For schema validation <a class="reference external" href="https://github.com/sunlightlabs/validictory">Validictory</a> is used.
-Check the documentation to learn how to define schemas: <a class="reference external" href="http://validictory.readthedocs.org/en/latest/">Validictory Documentation</a>.</p>
-<div class="section" id="arrays-on-get-requests">
-<h3>Arrays on GET requests<a class="headerlink" href="#arrays-on-get-requests" title="Permalink to this headline">¶</a></h3>
-<p>It is possible to validate arrays on GET parameters. The parameter string will
-be split by commas and each tag will be used as a list value. This way it is
-for example possible to validate against a list of allowed words:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/article?id=100&amp;categories=news,music&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span>
-<span class="go">400 Bad Request</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">print_json</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-<span class="go">{</span>
-<span class="go">    &quot;errors&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;Failed to validate field &#39;categories&#39; list schema: Value u&#39;music&#39; for list item is not in the enumeration: [&#39;news&#39;, &#39;sports&#39;, &#39;politics&#39;]&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;query&quot;</span>
-<span class="go">        },</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;No JSON object could be decoded&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;body&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ],</span>
-<span class="go">    &quot;status&quot;: &quot;error&quot;</span>
-<span class="go">}</span>
+<p>If the function get called with valid keyword arguments everything is fine:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">:</span><span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">:</span><span class="mi">42</span><span class="p">})</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="validators">
-<h2>Validators<a class="headerlink" href="#validators" title="Permalink to this headline">¶</a></h2>
-<p>This example shows how to implement <cite>validators</cite> as functions:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
-
-<span class="n">article</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;article&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/article&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">validate_query</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Check if the id field is set &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;query&#39;</span><span class="p">,</span>
-                           <span class="s">&#39;Parameter `id` is missing&#39;</span><span class="p">)</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="mi">400</span>
-
-
-<span class="nd">@article.get</span><span class="p">(</span><span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">validate_query</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;success&#39;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>The <cite>validator</cite> function gets called by <cite>lovely.pyrest</cite> and passes the incoming
-request as parameter.
-The <cite>validator</cite> just has to add one or more errors if validation fails.
-It&#8217;s possible to use multiple validators.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/article&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span>
-<span class="go">400 Bad Request</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">print_json</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-<span class="go">{</span>
-<span class="go">    &quot;errors&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;description&quot;: &quot;Parameter `id` is missing&quot;,</span>
-<span class="go">            &quot;location&quot;: &quot;query&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ],</span>
-<span class="go">    &quot;status&quot;: &quot;error&quot;</span>
-<span class="go">}</span>
+<p>If the given keyword arguments are not valid a ValidationException is raised:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s">&quot;bar&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">ValidationException</span>: <span class="n">Value &#39;bar&#39; for field &#39;data&#39; is not of type object</span>
 </pre></div>
 </div>
 </div>
@@ -222,18 +108,14 @@ It&#8217;s possible to use multiple validators.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Validation</a><ul>
-<li><a class="reference internal" href="#schema-validation">Schema Validation</a><ul>
-<li><a class="reference internal" href="#arrays-on-get-requests">Arrays on GET requests</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#validators">Validators</a></li>
+<li><a class="reference internal" href="#the-validate-decorator">The <cite>validate</cite> decorator</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="service.html"
-                        title="previous chapter">Creating Services</a></p>
+                        title="previous chapter">Example Service</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="sphinx.html"
                         title="next chapter">Generate Documentation</a></p>
@@ -261,9 +143,9 @@ It&#8217;s possible to use multiple validators.</p>
           <a href="sphinx.html" title="Generate Documentation"
              >next</a></li>
         <li class="right" >
-          <a href="service.html" title="Creating Services"
+          <a href="service.html" title="Example Service"
              >previous</a> |</li>
-        <li><a href="index.html">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">lovely.pyrest 2.0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

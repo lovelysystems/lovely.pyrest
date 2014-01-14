@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Creating Services &mdash; lovely.pyrest 0.1.1 documentation</title>
+    <title>Example Service &mdash; lovely.pyrest 2.0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1.1',
+        VERSION:     '2.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="lovely.pyrest 0.1.1 documentation" href="index.html" />
+    <link rel="top" title="lovely.pyrest 2.0.5 documentation" href="index.html" />
     <link rel="next" title="Validation" href="validation.html" />
     <link rel="prev" title="Setup a Project using Lovely PyRest" href="setup.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">lovely.pyrest 2.0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,37 +54,83 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="creating-services">
-<h1>Creating Services<a class="headerlink" href="#creating-services" title="Permalink to this headline">¶</a></h1>
-<p>After you setup your first Project (See <a class="reference internal" href="setup.html#setup-project"><em>Setup a Pyramid application</em></a>) you can define a
-service.
-Create a <cite>view.py</cite> file and add it to the package you created:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.service</span> <span class="kn">import</span> <span class="n">Service</span>
+  <p>This documentation is about how to create a REST like API Service by using the
+two decorators <cite>RestService</cite> and <cite>rpcmethod</cite>.</p>
+<div class="section" id="example-service">
+<h1>Example Service<a class="headerlink" href="#example-service" title="Permalink to this headline">¶</a></h1>
+<p>Here is one simple REST service to demonstrate how to use the decorators:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">wsgiref.simple_server</span> <span class="kn">import</span> <span class="n">make_server</span>
+<span class="kn">from</span> <span class="nn">pyramid.config</span> <span class="kn">import</span> <span class="n">Configurator</span>
+<span class="kn">from</span> <span class="nn">.rest</span> <span class="kn">import</span> <span class="n">RestService</span><span class="p">,</span> <span class="n">rpcmethod_route</span>
 
-<span class="n">svc</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;svc&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/svc&#39;</span><span class="p">)</span>
+<span class="nd">@RestService</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">)</span>                                                  <span class="c"># (1)</span>
+<span class="k">class</span> <span class="nc">HelloService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>                                       <span class="c"># (2)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">route_suffix</span><span class="o">=</span><span class="s">&#39;/{name}&#39;</span><span class="p">,</span> <span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">)</span>    <span class="c"># (3)</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>                                      <span class="c"># (4)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 
 
-<span class="nd">@svc.get</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Hello World!&#39;</span><span class="p">}</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">Configurator</span><span class="p">()</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="s">&#39;/hello&#39;</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>                   <span class="c"># (5)</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>                                                    <span class="c"># (6)</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">scan</span><span class="p">()</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">make_wsgi_app</span><span class="p">()</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">make_server</span><span class="p">(</span><span class="s">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="mi">8080</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>With this application you can perform GET requests on the defined endpoint:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/svc&#39;</span><span class="p">)</span>
-<span class="go">Response: 200 OK</span>
-<span class="go">Content-Type: application/json; charset=UTF-8</span>
-<span class="go">{&quot;title&quot;: &quot;Hello World!&quot;}</span>
-</pre></div>
+<p>Once the service has been started issue a request with curl like this:</p>
+<div class="highlight-python"><pre>$ curl -XPOST -H "Content-Type: application/json" localhost:8080/hello/you \
+  -d '{"data":{"a":42, "b":"c"}}'
+{"keys": 2, "name": "you"}</pre>
 </div>
-<p>The default renderer of a <cite>Service</cite> is <cite>json</cite>. You can overwrite it in the
-method decorator:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@svc.get</span><span class="p">(</span><span class="n">render</span><span class="o">=</span><span class="s">&#39;string&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&#39;Hello World!&#39;</span>
-</pre></div>
 </div>
-<p>Generally you can set every predicate argument which you can use in pyramid.
-See <a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/viewconfig.html#predicate-arguments">Predicate Arguments</a>.</p>
+<div class="section" id="step-by-step">
+<h1>Step by step<a class="headerlink" href="#step-by-step" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>The first thing to setup a REST service is a class decorated with
+<cite>RestService</cite> (1). The required parameter given to the decorator indicates the
+base route name to which the service will be bound. The class to decorate has
+to accept a request parameter in the constructor because this class will be
+used as the view (2).</p>
+<p>Second, one or more methods of this class has to be decorated with
+<cite>rpcmethod_route</cite> (3).  If no parameters were passed to the <cite>rpcmethod_route</cite>
+decorator the endpoint for this method will be available at the pattern of the
+configured base route (in the example above it&#8217;s &#8216;/hello&#8217;) with the http
+method GET. The decorator also provides a parameter called <cite>route_suffix</cite>
+which get appended to the pattern of the base route (in the example above it&#8217;s
+&#8216;/{name}&#8217;). Any other given keyword arguments get passed to the internal
+add_route command. For details see the documentation of pyramids
+<a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/en/latest/api/config.html#pyramid.config.Configurator.add_route">config.add_route method</a> .</p>
+<p>The decorated method has to have a proper signature to match the incoming
+request (4). The following keyword arguments will be passed to the method:</p>
+<div class="highlight-python"><pre>- the matchdict (in the example above {name} from the suffix pattern)
+- request params
+- request body</pre>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>We need to add the base route registered with the name used in the
+<cite>RestService</cite> decorator (5). Since this route is not relevant for url dispatching
+it make sence to register the route as a static route.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is neccesary to commit the config after registering the base routes and
+before calling config.scan() because otherwise the base route is not available
+while processing the decorator and so it&#8217;s not possible to determine the
+pattern of the base route (6).</p>
+</div>
+<p>The config.scan() step will process the decorator which add&#8217;s implicitly the
+route and the view for each decorated method.</p>
+</div>
 </div>
 
 
@@ -93,6 +139,16 @@ See <a class="reference external" href="http://docs.pylonsproject.org/projects/p
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example Service</a></li>
+<li><a class="reference internal" href="#step-by-step">Step by step</a><ul>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="setup.html"
                         title="previous chapter">Setup a Project using Lovely PyRest</a></p>
@@ -125,7 +181,7 @@ See <a class="reference external" href="http://docs.pylonsproject.org/projects/p
         <li class="right" >
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              >previous</a> |</li>
-        <li><a href="index.html">lovely.pyrest 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">lovely.pyrest 2.0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
