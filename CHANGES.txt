@@ -2,6 +2,9 @@
 Changes for Lovey Pyrest
 ========================
 
+2014/01/14 2.0.2
+================
+
  - bugfix: prevent duplicate rendering of methods in autodoc
 
 2014/01/14 2.0.1
