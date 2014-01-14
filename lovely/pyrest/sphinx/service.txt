@@ -121,6 +121,55 @@ Render the documentation::
                         <line>
                             }
 
+If the module is used in multiple sphinx directives the service and his methods
+get registered again.
+Render again to ensure that the methods don't get rendered twice on second
+run::
+
+    >>> out = directive.run()
+    >>> print render_doc_node(out[0])
+    <document source="<string>">
+        <section ids="service_0">
+            <title>
+                base service
+            <paragraph>
+                Description of the Service
+            <section ids="service_0_GET">
+                <title>
+                    GET - /base/{id}
+                <paragraph>
+                    Accept: application/json
+            <section ids="service_0_POST">
+                <title>
+                    POST - /base
+                <paragraph>
+                    Updates a sample
+                <paragraph>
+                    Content-Type: application/json
+                <section ids="service_0_POST_validator">
+                    <title>
+                        Data Schema:
+                    <line_block>
+                        <line>
+                            {
+                        <line_block>
+                            <line>
+                                "type": "object",
+                            <line>
+                                "properties": {
+                            <line_block>
+                                <line>
+                                    "u": {
+                                <line_block>
+                                    <line>
+                                        "type": "string"
+                                <line>
+                                    }
+                            <line>
+                                }
+                        <line>
+                            }
+
 Convert to List
 ===============
 

@@ -146,6 +146,9 @@ class RestService(object):
             # register the service
             SERVICES[self.baseRouteName] = self
             self.description = service.__doc__
+            # if the module is used multiple times for documentation generation
+            # the service get registered a few times so reset methods here.
+            self.methods = []
             # loop through all decorated methods and add a route and a view
             # for it
             for (name, method) in methods:
