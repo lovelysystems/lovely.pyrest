@@ -22,17 +22,6 @@ def forbidden(request):
             }
 
 
-def database_error(exc, request):
-    if 'DuplicateKeyException' in exc.message:
-        request.response.status = 409
-        return {
-                'status': "ERROR",
-                'reason': "A document with the same primary key exists already"
-                }
-    else:
-        raise
-
-
 def notfound(request):
     request.response.status = 404
     return {
