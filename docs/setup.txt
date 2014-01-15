@@ -17,14 +17,6 @@ See `Creating Your First Pyramid Application
 If you are not familiar with the `Pyramid` framework this would be a good
 starting point: `About Pyramid <http://www.pylonsproject.org/projects/pyramid/about>`_.
 
-Add lovely.pyrest
-=================
-
-After creating the project you just have to include the `lovely.pyrest`
-extension in your config::
-
-    config.include('lovely.pyrest')
-
 So your application may look like:
 
 .. literalinclude:: examples/main.py

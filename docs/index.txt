@@ -11,7 +11,6 @@ Features
 ========
 
     - Sphinx extension to automatically generate documentation
-    - It's possible to get help information of every endpoint
     - Automatic schema-validation based on `jsonschema <http://json-schema.org/>`_
 
 
