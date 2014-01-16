@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Lovely PyRest Documentation &mdash; lovely.pyrest 2.0.6 documentation</title>
+    <title>Lovely PyRest Documentation &mdash; lovely.pyrest 2.0.7 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.0.6',
+        VERSION:     '2.0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="lovely.pyrest 2.0.6 documentation" href="#" />
+    <link rel="top" title="lovely.pyrest 2.0.7 documentation" href="#" />
     <link rel="next" title="Setup a Project using Lovely PyRest" href="setup.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -41,7 +41,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              accesskey="N">next</a></li>
-        <li><a href="#">lovely.pyrest 2.0.6 documentation</a> &raquo;</li> 
+        <li><a href="#">lovely.pyrest 2.0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,7 +61,6 @@ decorating classes and methods.</p>
 <blockquote>
 <div><ul class="simple">
 <li>Sphinx extension to automatically generate documentation</li>
-<li>It&#8217;s possible to get help information of every endpoint</li>
 <li>Automatic schema-validation based on <a class="reference external" href="http://json-schema.org/">jsonschema</a></li>
 </ul>
 </div></blockquote>
@@ -90,7 +89,7 @@ decorating classes and methods.</p>
 <h2>First Example<a class="headerlink" href="#first-example" title="Permalink to this headline">¶</a></h2>
 <p>This is an example of a full WSGI application using <cite>lovely.pyrest</cite>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.rest</span> <span class="kn">import</span> <span class="n">RestService</span><span class="p">,</span> <span class="n">rpcmethod_route</span>
-<span class="kn">from</span> <span class="nn">lovely.pyrest.validation</span> <span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">lovely.pyrest.validation</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationException</span>
 
 
 <span class="n">ARTICLES</span> <span class="o">=</span> <span class="p">{}</span>
@@ -130,8 +129,18 @@ decorating classes and methods.</p>
         <span class="k">return</span> <span class="n">ARTICLES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">bad_request</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="k">return</span> <span class="p">{</span>
+            <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&quot;ERROR&quot;</span><span class="p">,</span>
+            <span class="s">&#39;reason&#39;</span><span class="p">:</span> <span class="n">exc</span><span class="o">.</span><span class="n">message</span>
+            <span class="p">}</span>
+
+
 <span class="k">def</span> <span class="nf">includeme</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
     <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;article&#39;</span><span class="p">,</span> <span class="s">&#39;/article&#39;</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">bad_request</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">,</span>
+                    <span class="n">context</span><span class="o">=</span><span class="n">ValidationException</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The example provides the following functionallity:</p>
@@ -202,7 +211,7 @@ error message gets returned if validation fails:</p>
         <li class="right" style="margin-right: 10px">
           <a href="setup.html" title="Setup a Project using Lovely PyRest"
              >next</a></li>
-        <li><a href="#">lovely.pyrest 2.0.6 documentation</a> &raquo;</li> 
+        <li><a href="#">lovely.pyrest 2.0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

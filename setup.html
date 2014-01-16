@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Setup a Project using Lovely PyRest &mdash; lovely.pyrest 2.0.6 documentation</title>
+    <title>Setup a Project using Lovely PyRest &mdash; lovely.pyrest 2.0.7 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.0.6',
+        VERSION:     '2.0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="lovely.pyrest 2.0.6 documentation" href="index.html" />
+    <link rel="top" title="lovely.pyrest 2.0.7 documentation" href="index.html" />
     <link rel="next" title="Example Service" href="service.html" />
     <link rel="prev" title="Lovely PyRest Documentation" href="index.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="Lovely PyRest Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">lovely.pyrest 2.0.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">lovely.pyrest 2.0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -63,14 +63,6 @@
 <p>See <a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/firstapp.html#firstapp-chapter">Creating Your First Pyramid Application</a>.</p>
 <p>If you are not familiar with the <cite>Pyramid</cite> framework this would be a good
 starting point: <a class="reference external" href="http://www.pylonsproject.org/projects/pyramid/about">About Pyramid</a>.</p>
-</div>
-<div class="section" id="add-lovely-pyrest">
-<h2>Add lovely.pyrest<a class="headerlink" href="#add-lovely-pyrest" title="Permalink to this headline">¶</a></h2>
-<p>After creating the project you just have to include the <cite>lovely.pyrest</cite>
-extension in your config:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">config</span><span class="o">.</span><span class="n">include</span><span class="p">(</span><span class="s">&#39;lovely.pyrest&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>So your application may look like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyramid.config</span> <span class="kn">import</span> <span class="n">Configurator</span>
 
@@ -79,7 +71,6 @@ extension in your config:</p>
     <span class="sd">&quot;&quot;&quot; This function returns a Pyramid WSGI application.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">Configurator</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">include</span><span class="p">(</span><span class="s">&#39;lovely.pyrest&#39;</span><span class="p">)</span>
     <span class="n">config</span><span class="o">.</span><span class="n">scan</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">config</span><span class="o">.</span><span class="n">make_wsgi_app</span><span class="p">()</span>
 </pre></div>
@@ -97,7 +88,6 @@ extension in your config:</p>
   <ul>
 <li><a class="reference internal" href="#">Setup a Project using Lovely PyRest</a><ul>
 <li><a class="reference internal" href="#setup-a-pyramid-application">Setup a Pyramid application</a></li>
-<li><a class="reference internal" href="#add-lovely-pyrest">Add lovely.pyrest</a></li>
 </ul>
 </li>
 </ul>
@@ -134,7 +124,7 @@ extension in your config:</p>
         <li class="right" >
           <a href="index.html" title="Lovely PyRest Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">lovely.pyrest 2.0.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">lovely.pyrest 2.0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
