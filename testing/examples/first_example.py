@@ -1,5 +1,5 @@
 from lovely.pyrest.rest import RestService, rpcmethod_route
-from lovely.pyrest.validation import validate
+from lovely.pyrest.validation import validate, ValidationException
 
 
 ARTICLES = {}
@@ -39,5 +39,15 @@ class ArticlesService(object):
         return ARTICLES.get(id)
 
 
+def bad_request(exc, request):
+    request.response.status = 400
+    return {
+            'status': "ERROR",
+            'reason': exc.message
+            }
+
+
 def includeme(config):
     config.add_route('article', '/article', static=True)
+    config.add_view(bad_request, renderer='json',
+                    context=ValidationException)

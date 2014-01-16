@@ -2,6 +2,8 @@
 Changes for Lovey Pyrest
 ========================
 
+ - removed error views from package
+
 2014/01/15 2.0.6
 ================
 
