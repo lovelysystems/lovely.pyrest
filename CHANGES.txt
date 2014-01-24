@@ -2,6 +2,10 @@
 Changes for Lovey Pyrest
 ========================
 
+ - modified the documentation output
+    - validation schema is rendered as code block
+    - endpoint title is first line of docstring
+
 2014/01/16 2.0.7
 ================
 

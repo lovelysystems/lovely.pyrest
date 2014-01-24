@@ -57,31 +57,27 @@
 <h3>article service<a class="headerlink" href="#service_0" title="Permalink to this headline">¶</a></h3>
 <p>Create and read articles</p>
 <div class="section" id="service_0_POST">
-<h4>POST - /article<a class="headerlink" href="#service_0_POST" title="Permalink to this headline">¶</a></h4>
-<p>Update article</p>
+<h4>Update article<a class="headerlink" href="#service_0_POST" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><pre>POST - /article</pre>
+</div>
 <p>Content-Type: application/json</p>
 </div>
 <div class="section" id="service_0_GET">
-<h4>GET - /article<a class="headerlink" href="#service_0_GET" title="Permalink to this headline">¶</a></h4>
-<p>Returns the article</p>
+<h4>Returns the article<a class="headerlink" href="#service_0_GET" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><pre>GET - /article</pre>
+</div>
 <p>Accept: application/json</p>
 <div class="section" id="service_0_GET_validator">
-<h5>Data Schema:<a class="headerlink" href="#service_0_GET_validator" title="Permalink to this headline">¶</a></h5>
-<div class="line-block">
-<div class="line">{</div>
-<div class="line-block">
-<div class="line">&#8220;type&#8221;: &#8220;object&#8221;,</div>
-<div class="line">&#8220;properties&#8221;: {</div>
-<div class="line-block">
-<div class="line">&#8220;title&#8221;: {</div>
-<div class="line-block">
-<div class="line">&#8220;type&#8221;: &#8220;string&#8221;</div>
-</div>
-<div class="line">}</div>
-</div>
-<div class="line">}</div>
-</div>
-<div class="line">}</div>
+<h5>Validation Schema<a class="headerlink" href="#service_0_GET_validator" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 </div>
 </div>
 </div>
@@ -100,9 +96,9 @@
 <li><a class="reference internal" href="#">Articles</a><ul>
 <li><a class="reference internal" href="#description">Description</a><ul>
 <li><a class="reference internal" href="#service_0">article service</a><ul>
-<li><a class="reference internal" href="#service_0_POST">POST - /article</a></li>
-<li><a class="reference internal" href="#service_0_GET">GET - /article</a><ul>
-<li><a class="reference internal" href="#service_0_GET_validator">Data Schema:</a></li>
+<li><a class="reference internal" href="#service_0_POST">Update article</a></li>
+<li><a class="reference internal" href="#service_0_GET">Returns the article</a><ul>
+<li><a class="reference internal" href="#service_0_GET_validator">Validation Schema</a></li>
 </ul>
 </li>
 </ul>

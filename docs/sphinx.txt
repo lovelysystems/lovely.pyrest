@@ -56,7 +56,6 @@ in your rst file like in this:
 
     Check that the included html file equals the output:
 
-
     >>> with open(os.path.join(examples, 'sphinx_out.html')) as f:
     ...     f.read() == out
     True
