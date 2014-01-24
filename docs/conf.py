@@ -1,10 +1,16 @@
 import os
 import re
-from lovely.pyrest import VERSION
 
 # inject the VERSION constant used below
 # This can be used because the build script updates the version number before
 # building the RPM.
+versionf_content = open("../lovely/pyrest/__init__.py").read()
+version_rex = r'^__version__ = [\'"]([^\'"]*)[\'"]$'
+m = re.search(version_rex, versionf_content, re.M)
+if m:
+    VERSION = m.group(1)
+else:
+    raise RuntimeError('Unable to find version string')
 
 
 def read(path):

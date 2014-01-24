@@ -89,7 +89,6 @@ def get_app(module_str):
         'lovely.pyrest.jsonp.param_name': 'callback'
     }
     config = testing.setUp(settings=settings)
-    config.include('lovely.pyrest')
     module = import_module(module_str)
     # check if the module has an `includeme` method and call it
     # because the base route must be added
