@@ -72,7 +72,6 @@ class ServiceDirective(Directive):
         service_node = nodes.section(ids=[service_id])
         title = "%s service" % service.baseRouteName
         service_node += nodes.title(text=title)
-
         if service.description is not None:
             service_node += create_node(trim(service.description))
 
@@ -80,10 +79,22 @@ class ServiceDirective(Directive):
             method = route_kw.get('request_method', 'GET')
             method_id = "%s_%s" % (service_id, method)
             method_node = nodes.section(ids=[method_id])
-            method_title = "%s - %s" % (method, pattern)
-            method_node += nodes.title(text=method_title)
-            # render description from docstring
             desc = func.__doc__
+            title = None
+            if desc:
+                # use the first line as title for the endpoint
+                sp = desc.split('\n', 1)
+                title = sp[0].strip()
+                if len(sp) > 1:
+                    desc = sp[1].strip()
+                else:
+                    desc = ''
+            if not title:
+                title = '%s - %s' % (method, pattern)
+            method_node += nodes.title(text=title)
+            url = "::\n\n    \n    %s - %s\n\n" % (method, pattern)
+            method_node += create_node(url)
+            # render description from docstring
             if desc:
                 method_node += create_node(trim(desc))
 
@@ -105,13 +116,13 @@ class ServiceDirective(Directive):
                                           method,
                                           'validator')
                 node = nodes.section(ids=[schema_id])
-                title = nodes.title(text='Data Schema:')
-                text = json.dumps(schema, indent=4)
-                # prefix every line with a pipe, so the rst conversation returns a
-                # line_block where the spaces are preserved
-                text = '\n'.join(['| ' + l for l in text.splitlines()])
+                title = nodes.title(text='Validation Schema')
                 node += title
-                node += create_node(trim(text))
+                text = json.dumps(schema, indent=4)
+                # indent the text block
+                text = '\n    '.join([l for l in text.splitlines()])
+                text = '::\n\n    ' + text + '\n\n'
+                node += create_node(text)
 
                 method_node += node
             service_node += method_node
