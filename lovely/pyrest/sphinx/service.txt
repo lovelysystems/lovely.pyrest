@@ -21,7 +21,10 @@ Create a service::
     ...                      content_type='application/json')
     ...     @validate(schema)
     ...     def sample(self, data):
-    ...         """ Updates a sample """
+    ...         """Updates a sample
+    ...
+    ...         The update modifies the sample.
+    ...         """
     ...
     ...     @rpcmethod_route(accept='application/json', route_suffix='/{id}')
     ...     def get(self, id, data):
@@ -92,38 +95,31 @@ Render the documentation::
             <section ids="service_0_GET">
                 <title>
                     GET - /base/{id}
+                <literal_block xml:space="preserve">
+                    GET - /base/{id}
                 <paragraph>
                     Accept: application/json
             <section ids="service_0_POST">
                 <title>
+                    Updates a sample
+                <literal_block xml:space="preserve">
                     POST - /base
                 <paragraph>
-                    Updates a sample
+                    The update modifies the sample.
                 <paragraph>
                     Content-Type: application/json
                 <section ids="service_0_POST_validator">
                     <title>
-                        Data Schema:
-                    <line_block>
-                        <line>
-                            {
-                        <line_block>
-                            <line>
-                                "type": "object",
-                            <line>
-                                "properties": {
-                            <line_block>
-                                <line>
-                                    "u": {
-                                <line_block>
-                                    <line>
-                                        "type": "string"
-                                <line>
-                                    }
-                            <line>
+                        Validation Schema
+                    <literal_block xml:space="preserve">
+                        {
+                            "type": "object",
+                            "properties": {
+                                "u": {
+                                    "type": "string"
                                 }
-                        <line>
                             }
+                        }
 
 If the module is used in multiple sphinx directives the service and his methods
 get registered again.
@@ -141,38 +137,31 @@ run::
             <section ids="service_0_GET">
                 <title>
                     GET - /base/{id}
+                <literal_block xml:space="preserve">
+                    GET - /base/{id}
                 <paragraph>
                     Accept: application/json
             <section ids="service_0_POST">
                 <title>
+                    Updates a sample
+                <literal_block xml:space="preserve">
                     POST - /base
                 <paragraph>
-                    Updates a sample
+                    The update modifies the sample.
                 <paragraph>
                     Content-Type: application/json
                 <section ids="service_0_POST_validator">
                     <title>
-                        Data Schema:
-                    <line_block>
-                        <line>
-                            {
-                        <line_block>
-                            <line>
-                                "type": "object",
-                            <line>
-                                "properties": {
-                            <line_block>
-                                <line>
-                                    "u": {
-                                <line_block>
-                                    <line>
-                                        "type": "string"
-                                <line>
-                                    }
-                            <line>
+                        Validation Schema
+                    <literal_block xml:space="preserve">
+                        {
+                            "type": "object",
+                            "properties": {
+                                "u": {
+                                    "type": "string"
                                 }
-                        <line>
                             }
+                        }
 
 Convert to List
 ===============
