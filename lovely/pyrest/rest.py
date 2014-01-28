@@ -168,7 +168,9 @@ class RestService(object):
                 # Register method
                 validator = None
                 if method.im_func.__name__ == 'validation_wrapper':
-                    validator = method.im_func.__closure__[1].cell_contents
+                    # index 2 of func_closure is the schema param of the validate
+                    # method in the tuple, not accessible via keyword
+                    validator = method.im_func.func_closure[2].cell_contents
                 self.methods.append((pattern, route_kw, view_kw, method, validator))
                 config.add_route(route_name, pattern, **route_kw)
                 config.add_view(view=service,
