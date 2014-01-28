@@ -2,6 +2,9 @@
 Changes for Lovey Pyrest
 ========================
 
+2014/01/28 2.0.9
+================
+
  - added optional convert_get_params parameter to validate function
 
 2014/01/24 2.0.8
