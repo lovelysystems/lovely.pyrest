@@ -46,7 +46,6 @@ _CONVERSION = {
     "integer": lambda s: int(s),
     "number": _number,
     "boolean": _boolean,
-    "array": lambda s: s.split(","),
 }
 
 
