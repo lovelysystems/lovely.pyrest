@@ -2,7 +2,7 @@
 Changes for Lovey Pyrest
 ========================
 
- - removed array validation convertion for get params
+ - removed array validation conversion for get params
 
 2014/01/28 2.0.9
 ================
