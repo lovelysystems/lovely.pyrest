@@ -131,17 +131,13 @@ It's possible to define custom validators within a validations schema::
     ... }
 
 The implementation of a custom validator has to return boolean True to
-validate the given value::
+validate the given value. The validator will get the field value as parameter::
 
     >>> from lovely.pyrest.validation import custom_validator
 
     >>> @custom_validator("x")
-    ... def failing_validator(data):
-    ...     return False
-
-    >>> @custom_validator("y")
-    ... def passing_validator(data):
-    ...     return True
+    ... def custom_validator(value):
+    ...     return value == 'pass'
 
 Now lets validate against the failing schema::
 
@@ -149,26 +145,13 @@ Now lets validate against the failing schema::
     ... def sample(data):
     ...     pass
 
-    >>> sample(data="blah")
+    >>> sample(data="fail")
     Traceback (most recent call last):
-    ValidationException: Value 'blah' for field 'data' is not valid due to custom validator 'x'
+    ValidationException: Value 'fail' for field 'data' is not valid due to custom validator 'x'
 
 Now lets validate agains a passing schema::
 
-    >>> schema = {
-    ...     "type": "object",
-    ...     "properties": {
-    ...         "data": {
-    ...             "custom_validator": "y"
-    ...         }
-    ...     }
-    ... }
-
-    >>> @validate(schema)
-    ... def sample(data):
-    ...     pass
-
-    >>> sample(data="blah")
+    >>> sample(data="pass")
 
 If the given custom_validator is not registered a SchemaError is raised::
 
