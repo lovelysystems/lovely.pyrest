@@ -115,3 +115,76 @@ Any other value is not allowed on boolean properties::
     >>> sample_get(d="None")
     Traceback (most recent call last):
     ValidationException: Value 'None' for field 'd' is not of type boolean
+
+Custom validators
+=================
+
+It's possible to define custom validators within a validations schema::
+
+    >>> schema = {
+    ...     "type": "object",
+    ...     "properties": {
+    ...         "data": {
+    ...             "custom_validator": "x"
+    ...         }
+    ...     }
+    ... }
+
+The implementation of a custom validator has to return boolean True to
+validate the given value::
+
+    >>> from lovely.pyrest.validation import custom_validator
+
+    >>> @custom_validator("x")
+    ... def failing_validator(data):
+    ...     return False
+
+    >>> @custom_validator("y")
+    ... def passing_validator(data):
+    ...     return True
+
+Now lets validate against the failing schema::
+
+    >>> @validate(schema)
+    ... def sample(data):
+    ...     pass
+
+    >>> sample(data="blah")
+    Traceback (most recent call last):
+    ValidationException: Value 'blah' for field 'data' is not valid due to custom validator 'x'
+
+Now lets validate agains a passing schema::
+
+    >>> schema = {
+    ...     "type": "object",
+    ...     "properties": {
+    ...         "data": {
+    ...             "custom_validator": "y"
+    ...         }
+    ...     }
+    ... }
+
+    >>> @validate(schema)
+    ... def sample(data):
+    ...     pass
+
+    >>> sample(data="blah")
+
+If the given custom_validator is not registered a SchemaError is raised::
+
+    >>> schema = {
+    ...     "type": "object",
+    ...     "properties": {
+    ...         "data": {
+    ...             "custom_validator": "z"
+    ...         }
+    ...     }
+    ... }
+
+    >>> @validate(schema)
+    ... def sample(data):
+    ...     pass
+
+    >>> sample(data="blah")
+    Traceback (most recent call last):
+    ValidationException: Custom validator 'z' not found

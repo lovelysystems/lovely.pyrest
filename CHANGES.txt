@@ -2,6 +2,9 @@
 Changes for Lovey Pyrest
 ========================
 
+
+ - extended Validator to provide custom validators by the schema
+
 2014/01/28 2.0.10
 =================
 

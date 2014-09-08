@@ -10,6 +10,12 @@ class Validator(validictory.SchemaValidator):
     """Extend the validator
     """
 
+    custom_validators = {}
+
+    @staticmethod
+    def register_custom_validator(name, func):
+        Validator.custom_validators[name] = func
+
     def validate_oneOf(self, x, fieldname, schema, props=None):
         """Allows to provide multiple schemas for one property
 
@@ -25,6 +31,32 @@ class Validator(validictory.SchemaValidator):
                 error = e
         if error:
             raise error
+
+    def validate_custom_validator(self, x, fieldname, schema, props=None):
+        """Allows to validate against custom validator.
+
+        The given schema might define a custom validator for a field by
+        passing 'custom_validator'. The used validator has to be registered by
+        the static method 'register_custom_validator'.
+        """
+        validator = Validator.custom_validators.get(props)
+        if not validator:
+            raise validictory.SchemaError(
+                "Custom validator %r not found" % props)
+        value = x.get(fieldname)
+        if not validator(value):
+            self._error("Value %(value)r for field '%(fieldname)s' is not "
+                        "valid due to custom validator %(validator)r",
+                        value, fieldname, validator=props)
+
+
+def custom_validator(name):
+    """Decorator to register a custom validator
+    """
+    def f(func):
+        Validator.register_custom_validator(name, func)
+        return func
+    return f
 
 
 def _number(s):
@@ -63,6 +95,7 @@ def _convert(kwargs, schema):
                     # do not convert - validation should fail
                     pass
     return params
+
 
 def validate(schema, convert_get_params=False):
     """ A decorator to validate the kwargs of the decorated function against
