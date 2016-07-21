@@ -83,7 +83,7 @@ class RestService(object):
         if route.factory:
             kw['factory'] = route.factory
         if route.pregenerator:
-            kw[pregenerator] = route.pregenerator
+            kw['pregenerator'] = route.pregenerator
 
         def xhr(p):
             kw['xhr'] = p.val
@@ -121,6 +121,7 @@ class RestService(object):
 
     def __init__(self, baseRouteName, **view_kwargs):
         self.baseRouteName = baseRouteName
+        self.serviceName = None
         self.view_kwargs = view_kwargs
         # All methods of the services get registered here for sphinx autodoc
         self.methods = []
@@ -144,14 +145,15 @@ class RestService(object):
                     )
             methods = inspect.getmembers(service, isRESTMethod)
             # register the service
-            SERVICES[self.baseRouteName] = self
+            self.serviceName = '@'.join((self.baseRouteName, baseRoute.path))
+            SERVICES[self.serviceName] = self
             self.description = service.__doc__
             # if the module is used multiple times for documentation generation
             # the service get registered a few times so reset methods here.
             self.methods = []
             # loop through all decorated methods and add a route and a view
             # for it
-            for (name, method) in methods:
+            for (methodName, method) in methods:
                 route_kw = {}
                 route_kw.update(route_defaults)
                 if hasattr(method, '__rpc_method_route__'):
@@ -163,25 +165,28 @@ class RestService(object):
                 view_kw.update(self.view_kwargs)
                 if hasattr(method, '__rpc_method_view__'):
                     view_kw.update(method.__rpc_method_view__)
-                route_name = '.'.join((service.__name__.lower(), name))
+                route_name = ('.'.join((self.baseRouteName, methodName))
+                              + '@'
+                              + baseRoute.path
+                             )
                 pattern = baseRoute.pattern + route_kw.pop('route_suffix', '')
                 # Register method
                 validator = None
                 if method.im_func.__name__ == 'validation_wrapper':
-                    # index 2 of func_closure is the schema param of the validate
-                    # method in the tuple, not accessible via keyword
+                    # index 2 of func_closure is the schema param of the
+                    # validate method in the tuple, not accessible via keyword
                     validator = method.im_func.func_closure[2].cell_contents
-                self.methods.append((pattern, route_kw, view_kw, method, validator))
+                self.methods.append(
+                            (pattern, route_kw, view_kw, method, validator))
                 config.add_route(route_name, pattern, **route_kw)
                 config.add_view(view=service,
                                 route_name=route_name,
-                                attr=name,
+                                attr=methodName,
                                 mapper=ViewMapper,
                                 renderer='json',
                                 **view_kw)
-                log.debug('Adding REST method %s %s (%s.%s)',
-                          route_kw['request_method'], pattern, service.__name__,
-                          name)
+                log.debug('Adding REST method %s %s (%s)',
+                          route_kw['request_method'], pattern, route_name)
 
         info = self.venusian.attach(wrapped, callback, category='restservice',
                                     depth=1)

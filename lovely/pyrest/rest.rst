@@ -93,8 +93,8 @@ required::
     >>> _ = RestService('base')(Service)
 
     >>> scanner.scan(stubmodule)
-    add_route ('service.foo', 'pattern') {'request_method': 'GET'}
-    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'renderer': 'json', 'route_name': 'service.foo', 'view': <class 'stubmodule.Service'>}
+    add_route ('base.foo@pattern', 'pattern') {'request_method': 'GET'}
+    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'renderer': 'json', 'route_name': 'base.foo@pattern', 'view': <class 'stubmodule.Service'>}
 
 Sometimes it is required to pass arguments to the view. For this case use the
 decorator `rpcmethod_view`. Same as `rpcmethod_route` this decorator will mark
@@ -112,8 +112,8 @@ a method as a rpc method::
     >>> _ = RestService('base')(Service)
 
     >>> scanner.scan(stubmodule)
-    add_route ('service.foo', 'pattern') {'request_method': 'GET'}
-    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'permission': 'Sample', 'route_name': 'service.foo', 'renderer': 'json', 'view': <class 'stubmodule.Service'>}
+    add_route ('base.foo@pattern', 'pattern') {'request_method': 'GET'}
+    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'permission': 'Sample', 'route_name': 'base.foo@pattern', 'renderer': 'json', 'view': <class 'stubmodule.Service'>}
 
 It's also possible to combine them::
 
@@ -129,8 +129,8 @@ It's also possible to combine them::
     >>> _ = RestService('base')(Service)
 
     >>> scanner.scan(stubmodule)
-    add_route ('service.foo', 'pattern') {'request_method': 'POST'}
-    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'permission': 'Sample', 'route_name': 'service.foo', 'renderer': 'json', 'view': <class 'stubmodule.Service'>}
+    add_route ('base.foo@pattern', 'pattern') {'request_method': 'POST'}
+    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'permission': 'Sample', 'route_name': 'base.foo@pattern', 'renderer': 'json', 'view': <class 'stubmodule.Service'>}
 
 
 Service wide configuration
@@ -156,8 +156,8 @@ the view::
     >>> _ = RestService('base', permission='admin')(Service)
 
     >>> scanner.scan(stubmodule)
-    add_route ('service.foo', '/base') {'request_method': 'GET', 'factory': <class stubmodule.StubFactory at 0x...>}
-    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'permission': 'admin', 'route_name': 'service.foo', 'renderer': 'json', 'view': <class 'stubmodule.Service'>}
+    add_route ('base.foo@/base', '/base') {'request_method': 'GET', 'factory': <class stubmodule.StubFactory at 0x...>}
+    add_view () {'mapper': <class 'lovely.pyrest.rest.ViewMapper'>, 'attr': 'foo', 'permission': 'admin', 'route_name': 'base.foo@/base', 'renderer': 'json', 'view': <class 'stubmodule.Service'>}
 
 
 rpcmethod_route

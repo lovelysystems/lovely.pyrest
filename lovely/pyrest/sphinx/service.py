@@ -25,7 +25,7 @@ class ServiceDirective(Directive):
     option_spec = {'services': convert_to_list}
 
     def run(self):
-        # Check if the pyramid config file is set, if souse paster to manage
+        # Check if the pyramid config file is set, if so use paster to manage
         # imports
         conf_file = self.pyramid_conf()
         if conf_file:
