@@ -2,6 +2,9 @@
 Changes for Lovey Pyrest
 ========================
 
+2015/07/21 2.1.1
+================
+
  - allow a REST class to be used on multiple routes
 
 2014/09/09 2.1.0
