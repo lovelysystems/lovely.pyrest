@@ -2,6 +2,9 @@
 Changes for Lovey Pyrest
 ========================
 
+2017/05/11 2.1.2
+================
+
  - ViewMapper: body with an array as root results in an `items` property
 
 2016/07/21 2.1.1
