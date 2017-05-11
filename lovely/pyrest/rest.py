@@ -15,6 +15,9 @@ def get_services():
 class ViewMapper(object):
     """ Mapper to pass request specific data to view method
     """
+
+    ROOT_ARRAY_KW_NAME = "items"
+
     def __init__(self, **kw):
         self.attr = kw.get('attr')
 
@@ -24,7 +27,10 @@ class ViewMapper(object):
                 """ Failsave function to access request.json_body
                 """
                 try:
-                    return request.json_body
+                    body = request.json_body
+                    if isinstance(body, list):
+                        return {self.ROOT_ARRAY_KW_NAME: body}
+                    return body
                 except:
                     return {}
 

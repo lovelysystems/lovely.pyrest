@@ -235,3 +235,9 @@ method must match::
 
     >>> mapper(View)(None, Request())
     {'params': '2', 'json_body': {'data': 123}, 'matchdict': '1'}
+
+If the provided json data is an array, the `items` keyword is added::
+
+    >>> Request.json_body = [{"data": 124}]
+    >>> mapper(View)(None, Request())
+    {'items': [{'data': 124}], 'params': '2', 'matchdict': '1'}
