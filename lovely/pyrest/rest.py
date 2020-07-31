@@ -9,7 +9,7 @@ SERVICES = {}
 
 
 def get_services():
-    return SERVICES.values()
+    return list(SERVICES.values())
 
 
 class ViewMapper(object):
@@ -43,7 +43,7 @@ class ViewMapper(object):
                 kw.update(request.matchdict)
 
                 # add kwargs from request params
-                kw.update(dict(request.params.items()))
+                kw.update(dict(list(request.params.items())))
 
                 # add kwargs from request body
                 kw.update(json_body(request))
@@ -178,10 +178,10 @@ class RestService(object):
                 pattern = baseRoute.pattern + route_kw.pop('route_suffix', '')
                 # Register method
                 validator = None
-                if method.im_func.__name__ == 'validation_wrapper':
+                if method.__func__.__name__ == 'validation_wrapper':
                     # index 2 of func_closure is the schema param of the
                     # validate method in the tuple, not accessible via keyword
-                    validator = method.im_func.func_closure[2].cell_contents
+                    validator = method.__func__.__closure__[2].cell_contents
                 self.methods.append(
                             (pattern, route_kw, view_kw, method, validator))
                 config.add_route(route_name, pattern, **route_kw)

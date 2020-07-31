@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 from docutils.core import publish_from_doctree, publish_doctree
 from contextlib import contextmanager
 from lovely.pyrest.rest import SERVICES
@@ -65,9 +65,9 @@ def print_json(js):
     try:
         d = json.loads(js)
     except ValueError:
-        print >> sys.stderr, js
+        print(js, file=sys.stderr)
         raise
-    print(json.dumps(d, indent=4, sort_keys=True))
+    print((json.dumps(d, indent=4, sort_keys=True)))
 
 
 def render_doc_node(node, writer_name='pseudoxml'):

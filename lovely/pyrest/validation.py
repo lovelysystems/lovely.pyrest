@@ -83,7 +83,7 @@ _CONVERSION = {
 
 def _convert(kwargs, schema):
     params = copy.deepcopy(kwargs)
-    for prop, o in schema.get('properties').iteritems():
+    for prop, o in schema.get('properties').items():
         stype = o.get('type')
         if stype in _CONVERSION:
             converter = _CONVERSION[stype]
@@ -111,7 +111,7 @@ def validate(schema, convert_get_params=False):
                 kwargs = _convert(kwargs, schema)
             try:
                 validictory.validate(kwargs, schema, Validator)
-            except ValueError, error:
+            except ValueError as error:
                 raise ValidationException(error.message)
             return f(*args, **kwargs)
         # link doc with function docstring, so it's accessible for generating
@@ -125,6 +125,6 @@ def non_required(schema):
     """ Helper function  to make all properties optional
     """
     s = copy.deepcopy(schema)
-    for v in s["properties"].values():
+    for v in list(s["properties"].values()):
         v['required'] = False
     return s
